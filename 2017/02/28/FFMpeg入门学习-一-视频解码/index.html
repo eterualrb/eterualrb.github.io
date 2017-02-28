@@ -34,7 +34,7 @@
 <meta property="og:image" content="http://yoursite.com/2017/02/28/FFMpeg入门学习-一-视频解码/9.png">
 <meta property="og:image" content="http://yoursite.com/2017/02/28/FFMpeg入门学习-一-视频解码/10.png">
 <meta property="og:image" content="http://yoursite.com/2017/02/28/FFMpeg入门学习-一-视频解码/test_yuv.gif">
-<meta property="og:updated_time" content="2017-02-28T09:35:15.000Z">
+<meta property="og:updated_time" content="2017-02-28T09:47:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="FFMpeg入门学习(一) 视频解码">
 <meta name="twitter:description" content="最近在学习音视频开发的相关知识，了解到目前很多主流播放器都是基于FFMpeg这个开源的框架进行二次开发完成的，所以在这里写几篇博客当作学习笔记了。
@@ -198,7 +198,7 @@
 
   <div id="toc" class="toc-article">
     <strong class="toc-title">文章目录</strong>
-    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#视频解码流程"><span class="toc-text">视频解码流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-注册复用器，编码器"><span class="toc-text">1. 注册复用器，编码器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-获取音视频文件信息"><span class="toc-text">2. 获取音视频文件信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-获取编解码器并且打开它"><span class="toc-text">3. 获取编解码器并且打开它</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-数据保存及转化信息配置"><span class="toc-text">4. 数据保存及转化信息配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-视频数据解码"><span class="toc-text">5. 视频数据解码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-释放资源"><span class="toc-text">6. 释放资源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#解码文件显示"><span class="toc-text">解码文件显示</span></a></li></ol></li></ol>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#视频解码流程"><span class="toc-text">视频解码流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-注册复用器，编码器"><span class="toc-text">1. 注册复用器，编码器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-获取音视频文件信息"><span class="toc-text">2. 获取音视频文件信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-获取编解码器并且打开它"><span class="toc-text">3. 获取编解码器并且打开它</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-数据保存及转化信息配置"><span class="toc-text">4. 数据保存及转化信息配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-视频数据解码"><span class="toc-text">5. 视频数据解码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-释放资源"><span class="toc-text">6. 释放资源</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#解码文件显示"><span class="toc-text">解码文件显示</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#完整代码地址"><span class="toc-text">完整代码地址</span></a></li></ol>
   </div>
 
 
@@ -276,8 +276,8 @@
 <p>如果我们要进行缩放或者转化像素格式，还需要在解码前去配置缩放或者像素格式转化的相关参数信息，这些信息都保存在<code>SwsContext</code>结构体中。<br><img src="/2017/02/28/FFMpeg入门学习-一-视频解码/8.png" alt="sws_getContext"></p>
 <h2 id="5-视频数据解码"><a href="#5-视频数据解码" class="headerlink" title="5. 视频数据解码"></a>5. 视频数据解码</h2><p>循环读取帧数据进行解码，如果需要缩放或者像素格式转化，做相应处理就可以了，直接贴上代码吧(这里将像素格式转化成YUV420P并写入到文件中)～<br><img src="/2017/02/28/FFMpeg入门学习-一-视频解码/9.png" alt="decode"></p>
 <h2 id="6-释放资源"><a href="#6-释放资源" class="headerlink" title="6. 释放资源"></a>6. 释放资源</h2><p>解码结束后，一定要记得释放资源哦～<br><img src="/2017/02/28/FFMpeg入门学习-一-视频解码/10.png" alt="release">  </p>
-<h2 id="解码文件显示"><a href="#解码文件显示" class="headerlink" title="解码文件显示"></a>解码文件显示</h2><p>到这里我们就使用FFMpeg完成了视频解码，附带一张解码后的YUV420P文件的显示效果吧~<br><img src="/2017/02/28/FFMpeg入门学习-一-视频解码/test_yuv.gif" alt="show"></p>
-
+<h1 id="解码文件显示"><a href="#解码文件显示" class="headerlink" title="解码文件显示"></a>解码文件显示</h1><p>到这里我们就使用FFMpeg完成了视频解码，附带一张解码后的YUV420P文件的显示效果吧~<br><img src="/2017/02/28/FFMpeg入门学习-一-视频解码/test_yuv.gif" alt="show"></p>
+<h1 id="完整代码地址"><a href="#完整代码地址" class="headerlink" title="完整代码地址"></a><a href="https://github.com/eterualrb/FFMpegABC" target="_blank" rel="external">完整代码地址</a></h1>
     
   </div>
 </article>
