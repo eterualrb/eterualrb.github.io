@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>FFMpeg入门学习(一) 视频解码 | 王白告的Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="开源项目 音视频 NDK," />
+  
+
+  <meta name="description" content="最近在学习音视频开发的相关知识，了解到目前很多主流播放器都是基于FFMpeg这个开源的框架进行二次开发完成的，所以在这里写几篇博客当作学习笔记了。
+视频解码流程1. 注册复用器，编码器在进行视频解码前，需要调用FFMpeg的复用器，编码器等的注册函数av_register_all()，该函数在所有基于FFMpeg的应用程序中几乎都是第一个被调用的，按照我的个人理解就是注册FFMpeg支持的所有编码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FFMpeg入门学习(一) 视频解码">
+<meta property="og:url" content="http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/index.html">
+<meta property="og:site_name" content="王白告的Blog">
+<meta property="og:description" content="最近在学习音视频开发的相关知识，了解到目前很多主流播放器都是基于FFMpeg这个开源的框架进行二次开发完成的，所以在这里写几篇博客当作学习笔记了。
+视频解码流程1. 注册复用器，编码器在进行视频解码前，需要调用FFMpeg的复用器，编码器等的注册函数av_register_all()，该函数在所有基于FFMpeg的应用程序中几乎都是第一个被调用的，按照我的个人理解就是注册FFMpeg支持的所有编码">
+<meta property="og:image" content="http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/1.png">
+<meta property="og:image" content="http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/2.png">
+<meta property="og:image" content="http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/3.png">
+<meta property="og:image" content="http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/4.png">
+<meta property="og:image" content="http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/5.png">
+<meta property="og:image" content="http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/6.png">
+<meta property="og:image" content="http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/7.png">
+<meta property="og:image" content="http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/8.png">
+<meta property="og:image" content="http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/9.png">
+<meta property="og:image" content="http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/10.png">
+<meta property="og:image" content="http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/test_yuv.gif">
+<meta property="og:updated_time" content="2017-03-22T08:47:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FFMpeg入门学习(一) 视频解码">
+<meta name="twitter:description" content="最近在学习音视频开发的相关知识，了解到目前很多主流播放器都是基于FFMpeg这个开源的框架进行二次开发完成的，所以在这里写几篇博客当作学习笔记了。
+视频解码流程1. 注册复用器，编码器在进行视频解码前，需要调用FFMpeg的复用器，编码器等的注册函数av_register_all()，该函数在所有基于FFMpeg的应用程序中几乎都是第一个被调用的，按照我的个人理解就是注册FFMpeg支持的所有编码">
+<meta name="twitter:image" content="http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/1.png">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?57e94d016e201fba3603a8a2b0263af0";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+  
+  <script type="text/javascript">
+	(function(){
+	    var bp = document.createElement('script');
+	    var curProtocol = window.location.protocol.split(':')[0];
+	    if (curProtocol === 'https') {
+	        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+	    }
+	    else {
+	        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+	    }
+	    var s = document.getElementsByTagName("script")[0];
+	    s.parentNode.insertBefore(bp, s);
+	})();
+  </script>
+
+
+
+  
+    <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  
+    <link rel="stylesheet" href="//cdn.bootcss.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  
+</head>
+
+<body>
+
+
+  
+    <span id="toolbox-mobile" class="toolbox-mobile">盒子</span>
+  
+
+  <div class="post-header CENTER">
+   
+  <div class="toolbox">
+    <a class="toolbox-entry" href="/">
+      <span class="toolbox-entry-text">盒子</span>
+      <i class="icon-angle-down"></i>
+      <i class="icon-home"></i>
+    </a>
+    <ul class="list-toolbox">
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/archives/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            博客
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/category/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            分类
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/tag/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            标签
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/link/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            友链
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/about/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            关于
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/atom.xml"
+            rel="noopener noreferrer"
+            target="_blank"
+            >
+            RSS
+          </a>
+        </li>
+      
+        <li class="item-toolbox">
+          <a
+            class="CIRCLE"
+            href="/search/"
+            rel="noopener noreferrer"
+            target="_self"
+            >
+            搜索
+          </a>
+        </li>
+      
+    </ul>
+  </div>
+
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#视频解码流程"><span class="toc-text">视频解码流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-注册复用器，编码器"><span class="toc-text">1. 注册复用器，编码器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-获取音视频文件信息"><span class="toc-text">2. 获取音视频文件信息</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-获取编解码器并且打开它"><span class="toc-text">3. 获取编解码器并且打开它</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-数据保存及转化信息配置"><span class="toc-text">4. 数据保存及转化信息配置</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-视频数据解码"><span class="toc-text">5. 视频数据解码</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-释放资源"><span class="toc-text">6. 释放资源</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#解码文件显示"><span class="toc-text">解码文件显示</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#完整代码地址"><span class="toc-text">完整代码地址</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-FFMpeg入门学习-一-视频解码" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">FFMpeg入门学习(一) 视频解码</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2016.08.28</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>王白告</span>
+        </span>
+      
+
+      
+
+
+      
+        <span>
+          <i class="icon-comment"></i>
+          <a href="http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/#disqus_thread"></a>
+        </span>
+      
+
+      
+      <i class="fa fa-eye"></i> 
+        <span id="busuanzi_container_page_pv">
+           &nbsp热度 <span id="busuanzi_value_page_pv">
+           <i class="fa fa-spinner fa-spin"></i></span>℃
+        </span>
+      
+
+      
+        <i class="icon-comment"></i> 
+        <span class="ds-thread-count" data-thread-key="post-FFMpeg入门学习-一-视频解码"><i class="fa fa-spinner fa-spin"></i></span> 条评论
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>最近在学习音视频开发的相关知识，了解到目前很多主流播放器都是基于FFMpeg这个开源的框架进行二次开发完成的，所以在这里写几篇博客当作学习笔记了。</p>
+<h1 id="视频解码流程"><a href="#视频解码流程" class="headerlink" title="视频解码流程"></a>视频解码流程</h1><h2 id="1-注册复用器，编码器"><a href="#1-注册复用器，编码器" class="headerlink" title="1. 注册复用器，编码器"></a>1. 注册复用器，编码器</h2><p>在进行视频解码前，需要调用FFMpeg的复用器，编码器等的注册函数<code>av_register_all()</code>，该函数在所有基于FFMpeg的应用程序中几乎都是第一个被调用的，按照我的个人理解就是注册FFMpeg支持的所有编码格式和编解码器，让我们的程序可以正确的使用FFMpeg的相关功能。想要了解该函数的更多内容请学习雷神的相关文章吧～<br><a href="http://blog.csdn.net/leixiaohua1020/article/details/12677129" target="_blank" rel="external">ffmpeg 源代码简单分析 ： av_register_all()</a></p>
+<h2 id="2-获取音视频文件信息"><a href="#2-获取音视频文件信息" class="headerlink" title="2. 获取音视频文件信息"></a>2. 获取音视频文件信息</h2><ul>
+<li><p>我们只有获取到视频文件的相关信息才可以正确的进行视频解码操作，这个信息在FFMpeg中就保存到了<code>AVFormatContext</code>结构体中，让我们看下它的注释内容吧<br><img src="/2016/08/28/FFMpeg入门学习-一-视频解码/1.png" alt="AVFormatContext"><br>注释中说它是一个<code>Format I/O context</code>，是格式和I/O的上下文？，我的理解它就是保存音视频文件信息的，需要使用<code>avformat_alloc_context</code>来分配内存空间，使用<code>avformat_free_context</code>来释放它。</p>
+</li>
+<li><p>在FFMpeg中我们通过调用<code>avformat_open_input</code>来获取文件的头部信息，让我们来看下它的注释吧<br><img src="/2016/08/28/FFMpeg入门学习-一-视频解码/2.png" alt="avformat_open_input"><br>注释中说调用该函数可以打开一个输入流并且读取它的头部信息，但是编解码器没有打开，打开的流必须使用<code>avformat_close_input</code>进行关闭，读取的头部信息会被写入第一个参数(注意这里是个二级指针)中，也就是之前我们所创建的<code>AVFormatContext</code>中。</p>
+</li>
+<li><p>在FFMpeg中我们通过调用<code>avformat_find_stream_info</code>来获取文件中流的信息，让我们来看下它的注释吧<br><img src="/2016/08/28/FFMpeg入门学习-一-视频解码/3.png" alt="avformat_find_stream_info"><br>文件中流的信息其实是被保存到了<code>AVFormatContext</code>的<code>streams</code>数组中，这个数组中就有我们需要用到的流的信息，来让我们看下有哪些类型的流信息吧~<br><img src="/2016/08/28/FFMpeg入门学习-一-视频解码/4.png" alt="streams"><br>最常用的应该就是视频流，音频流和字幕流了。</p>
+</li>
+<li><p>由于我们要做的是视频解码，所以我们需要获取video stream在上述<code>streams</code>数组中的索引位置。只有正确的找到了这个流，才可以获取到保存视频编解码方式上下文的结构体<code>AVCodecContext</code>。由于<code>AVCodecContext</code>注释的内容与其实际功能介绍关系不大，这里就不看它的注释内容了，我的理解就是这个结构体中保存的是音视频文件编解码的一些基本信息，比如视频宽和高，采样率，声道数，比特率，编解码器类型等。</p>
+</li>
+</ul>
+<h2 id="3-获取编解码器并且打开它"><a href="#3-获取编解码器并且打开它" class="headerlink" title="3. 获取编解码器并且打开它"></a>3. 获取编解码器并且打开它</h2><ul>
+<li><p>在获取到<code>AVCodecContext</code>后我们就可以根据其中的编解码器id获取到真正的编解码器<code>AVCodec</code>。<br><img src="/2016/08/28/FFMpeg入门学习-一-视频解码/5.png" alt="AVCodec"><br>让我们看下avcodec_find_decoder函数的注释来加深记忆吧～<br><img src="/2016/08/28/FFMpeg入门学习-一-视频解码/6.png" alt="avcodec_find_decoder"></p>
+</li>
+<li><p>获取到真正的解码器后我们就可以通过调用<code>avcodec_open2</code>函数来打开解码器，准备去解码压缩的视频数据。<br><img src="/2016/08/28/FFMpeg入门学习-一-视频解码/7.png" alt="avcodec_open2"></p>
+</li>
+</ul>
+<h2 id="4-数据保存及转化信息配置"><a href="#4-数据保存及转化信息配置" class="headerlink" title="4. 数据保存及转化信息配置"></a>4. 数据保存及转化信息配置</h2><p>在进行视频解码前，我们需要了解下音视频数据在FFMpeg中是怎么进行存储的。</p>
+<ul>
+<li>解码前的数据是存储在<code>AVPacket</code>结构体中的，也就是说<code>AVPacket</code>是存储压缩编码数据相关信息的结构体。</li>
+<li>解码后的数据是存储在<code>AVFrame</code>结构体中的。</li>
+</ul>
+<p>一般一个结构体存储一帧数据，如果是音频的话可能会存储多个帧的数据，FFMpeg解释器会保证我们得到的每个packet包含的是一个或者多个完整的帧数据。</p>
+<p>如果我们要进行缩放或者转化像素格式，还需要在解码前去配置缩放或者像素格式转化的相关参数信息，这些信息都保存在<code>SwsContext</code>结构体中。<br><img src="/2016/08/28/FFMpeg入门学习-一-视频解码/8.png" alt="sws_getContext"></p>
+<h2 id="5-视频数据解码"><a href="#5-视频数据解码" class="headerlink" title="5. 视频数据解码"></a>5. 视频数据解码</h2><p>循环读取帧数据进行解码，如果需要缩放或者像素格式转化，做相应处理就可以了，直接贴上代码吧(这里将像素格式转化成YUV420P并写入到文件中)～<br><img src="/2016/08/28/FFMpeg入门学习-一-视频解码/9.png" alt="decode"></p>
+<h2 id="6-释放资源"><a href="#6-释放资源" class="headerlink" title="6. 释放资源"></a>6. 释放资源</h2><p>解码结束后，一定要记得释放资源哦～<br><img src="/2016/08/28/FFMpeg入门学习-一-视频解码/10.png" alt="release">  </p>
+<h1 id="解码文件显示"><a href="#解码文件显示" class="headerlink" title="解码文件显示"></a>解码文件显示</h1><p>到这里我们就使用FFMpeg完成了视频解码，附带一张解码后的YUV420P文件的显示效果吧~<br><img src="/2016/08/28/FFMpeg入门学习-一-视频解码/test_yuv.gif" alt="show"></p>
+<h1 id="完整代码地址"><a href="#完整代码地址" class="headerlink" title="完整代码地址"></a><a href="https://github.com/eterualrb/FFMpegABC" target="_blank" rel="external">完整代码地址</a></h1>
+    
+  </div>
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2016/08/23/git查看文件修改纪录-可视化工具/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/category/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              分类
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/tag/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              标签
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/link/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              友链
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/about/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              关于
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/atom.xml"
+              rel="noopener noreferrer"
+              target="_blank"
+              >
+              RSS
+            </a>
+          </li>
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/search/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              搜索
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+  <section class="disqus-comments">
+    <div id="disqus_thread">
+      <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </div>
+  </section>
+
+  <script>
+    var disqus_shortname = 'おう こう';
+    
+    var disqus_url = 'http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/';
+    
+    (function(){
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+
+  <script id="dsq-count-scr" src="//おう こう.disqus.com/count.js" async></script>
+
+
+
+    
+  <section class="duoshuo-comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="post-FFMpeg入门学习-一-视频解码" 
+      data-title="FFMpeg入门学习(一) 视频解码" data-url="http://yoursite.com/2016/08/28/FFMpeg入门学习-一-视频解码/index.html"></div>
+    <!-- 多说评论框 end -->
+  </section>
+
+
+
+
+  <script type="text/javascript">
+  var duoshuoQuery = {short_name:"forsigner"};
+  (function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';ds.async = true;
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    ds.charset = 'UTF-8';
+    (document.getElementsByTagName('head')[0]
+     || document.getElementsByTagName('body')[0]).appendChild(ds);
+  })();
+  </script>
+
+
+    
+  <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script>
+  var cloudTieConfig = {
+    url: document.location.href, 
+    sourceId: "",
+    productKey: "d16a7241e7cd4b389584ed8db2a4e8bc",
+    target: "cloud-tie-wrapper"
+  };
+</script>
+<script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
