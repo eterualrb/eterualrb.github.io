@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android UI基础(一) 屏幕尺寸信息 | 王白告的Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="移动开发,开源,架构,全栈,Android" />
+  
+
+  <meta name="description" content="参考：Android群英传
+Android的手机屏幕，不管是分辨率还是大小都是五花八门，千奇百怪的，这在一定程度上造成了绘图时的难度。接下来我们来了解些屏幕的一些相关知识，来保持在不同的屏幕上绘图的准确性。
+1. 屏幕参数一块屏幕参数通常具有以下几个参数
+
+屏幕大小 指屏幕对角线的长度，通常使用“寸”来度量，例如4.7寸手机，5.5寸手机等。
+
+分辨率  指手机屏幕的像素点个数，例如720x128">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android UI基础(一) 屏幕尺寸信息">
+<meta property="og:url" content="http://yoursite.com/2017/03/24/Android-UI基础-一-屏幕尺寸信息/index.html">
+<meta property="og:site_name" content="王白告的Blog">
+<meta property="og:description" content="参考：Android群英传
+Android的手机屏幕，不管是分辨率还是大小都是五花八门，千奇百怪的，这在一定程度上造成了绘图时的难度。接下来我们来了解些屏幕的一些相关知识，来保持在不同的屏幕上绘图的准确性。
+1. 屏幕参数一块屏幕参数通常具有以下几个参数
+
+屏幕大小 指屏幕对角线的长度，通常使用“寸”来度量，例如4.7寸手机，5.5寸手机等。
+
+分辨率  指手机屏幕的像素点个数，例如720x128">
+<meta property="og:updated_time" content="2017-03-24T03:20:39.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android UI基础(一) 屏幕尺寸信息">
+<meta name="twitter:description" content="参考：Android群英传
+Android的手机屏幕，不管是分辨率还是大小都是五花八门，千奇百怪的，这在一定程度上造成了绘图时的难度。接下来我们来了解些屏幕的一些相关知识，来保持在不同的屏幕上绘图的准确性。
+1. 屏幕参数一块屏幕参数通常具有以下几个参数
+
+屏幕大小 指屏幕对角线的长度，通常使用“寸”来度量，例如4.7寸手机，5.5寸手机等。
+
+分辨率  指手机屏幕的像素点个数，例如720x128">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+
+  <div class="post-header">
+   
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-屏幕参数"><span class="toc-text">1. 屏幕参数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-系统屏幕密度"><span class="toc-text">2. 系统屏幕密度</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-独立像素密度dp"><span class="toc-text">3. 独立像素密度dp</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-单位转化"><span class="toc-text">4. 单位转化</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-Android-UI基础-一-屏幕尺寸信息" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Android UI基础(一) 屏幕尺寸信息</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2017.03.24</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>王白告</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>参考：Android群英传</p>
+<p>Android的手机屏幕，不管是分辨率还是大小都是五花八门，千奇百怪的，这在一定程度上造成了绘图时的难度。接下来我们来了解些屏幕的一些相关知识，来保持在不同的屏幕上绘图的准确性。</p>
+<h1 id="1-屏幕参数"><a href="#1-屏幕参数" class="headerlink" title="1. 屏幕参数"></a>1. 屏幕参数</h1><p>一块屏幕参数通常具有以下几个参数</p>
+<ul>
+<li><p>屏幕大小<br> 指<mark>屏幕对角线的长度</mark>，通常使用“寸”来度量，例如4.7寸手机，5.5寸手机等。</p>
+</li>
+<li><p>分辨率<br>  指<mark>手机屏幕的像素点个数</mark>，例如720x1280就是指屏幕的分辨率，指宽有720个像素点，而高有1280个像素点。</p>
+</li>
+<li><p>PPI<br>  <mark>每英寸像素(Pixels Per Inch)</mark>又被称为<mark>DPI(Dots Per Inch)</mark>。<mark>它是由对角线的像素点数除以屏幕的大小得到的</mark>，通常达到400PPI就已经是非常高的屏幕密度了。</p>
+</li>
+</ul>
+<h1 id="2-系统屏幕密度"><a href="#2-系统屏幕密度" class="headerlink" title="2. 系统屏幕密度"></a>2. 系统屏幕密度</h1><p>每个厂商的Android手机具有不同的大小尺寸和像素密度的屏幕。Android系统如果要精确到每种DPI的屏幕，那基本是不可能的。因此，系统定义了几个标准的DPI值，作为手机的固定DPI，如下表所示。 </p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">密度</th>
+<th style="text-align:center">ldpi</th>
+<th style="text-align:center">mdpi</th>
+<th style="text-align:center">hdpi</th>
+<th style="text-align:center">xhdpi</th>
+<th style="text-align:center">xxhdpi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">密度值</td>
+<td style="text-align:center">120</td>
+<td style="text-align:center">160</td>
+<td style="text-align:center">240</td>
+<td style="text-align:center">320</td>
+<td style="text-align:center">480</td>
+</tr>
+<tr>
+<td style="text-align:center">分辨率</td>
+<td style="text-align:center">240x320</td>
+<td style="text-align:center">320x480</td>
+<td style="text-align:center">480x800</td>
+<td style="text-align:center">720x1280</td>
+<td style="text-align:center">1080x1920</td>
+</tr>
+</tbody>
+</table>
+<h1 id="3-独立像素密度dp"><a href="#3-独立像素密度dp" class="headerlink" title="3. 独立像素密度dp"></a>3. 独立像素密度dp</h1><p>正是由于各种屏幕密度的不同，导致同样像素大小的长度在不同密度的屏幕上显示长度不同。因为相同长度的屏幕，高密度的屏幕包含更多的像素点。Android系统使用mdpi即密度值为160的屏幕作为标准，在这个屏幕上1px＝1dp。其它屏幕则可以通过比例进行换算，例如同样是100dp的长度，在mdpi中为100px，而在hdpi中为150px。我们也可以得出在各个密度值中的换算公式，在mdpi中1dp＝1px，在hdpi中1dp＝1.5px，在xhdpi中1dp＝2px，在xxhdpi中1dp＝3px。由此我们也可以得到各个分辨率直接的换算比例，即<mark>ldpi:mdpi:hdpi:xhdpi:xxhdpi=3:4:6:8:12</mark>。</p>
+<h1 id="4-单位转化"><a href="#4-单位转化" class="headerlink" title="4. 单位转化"></a>4. 单位转化</h1><p>根据上面的内容我们可以非常方便地对这些单位进行转化。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line">/**</div><div class="line">    * 将px值转化为dip或dp值，保证尺寸大小不变</div><div class="line">    *</div><div class="line">    * @param context</div><div class="line">    * @param pxValue</div><div class="line">    * @return</div><div class="line">    */</div><div class="line">   public static int px2dip(Context context, float pxValue) &#123;</div><div class="line">       final float scale = context.getResources().getDisplayMetrics().density;</div><div class="line">       return (int) (pxValue / scale + 0.5f);</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   /**</div><div class="line">    * 将dip或dp值转化为px值，保证尺寸大小不变</div><div class="line">    *</div><div class="line">    * @param context</div><div class="line">    * @param dipValue</div><div class="line">    * @return</div><div class="line">    */</div><div class="line">   public static int dip2px(Context context, float dipValue) &#123;</div><div class="line">       final float scale = context.getResources().getDisplayMetrics().density;</div><div class="line">       return (int) (dipValue * scale + 0.5f);</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   /**</div><div class="line">    * 将px值转化为sp值，保证文字大小不变</div><div class="line">    *</div><div class="line">    * @param context</div><div class="line">    * @param pxValue</div><div class="line">    * @return</div><div class="line">    */</div><div class="line">   public static int px2sp(Context context, float pxValue) &#123;</div><div class="line">       final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;</div><div class="line">       return (int) (pxValue / fontScale + 0.5f);</div><div class="line">   &#125;</div><div class="line">   </div><div class="line">   /**</div><div class="line">    * 将sp值转化为px值，保证文字大小不变</div><div class="line">    *</div><div class="line">    * @param context</div><div class="line">    * @param spValue</div><div class="line">    * @return</div><div class="line">    */</div><div class="line">   public static int sp2px(Context context, float spValue) &#123;</div><div class="line">       final float fontScale = context.getResources().getDisplayMetrics().scaledDensity;</div><div class="line">       return (int) (spValue * fontScale + 0.5f);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+    
+  </div>
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2016/08/28/FFMpeg入门学习-一-视频解码/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
