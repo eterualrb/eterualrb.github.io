@@ -15,22 +15,22 @@
     <meta name="keywords" content="移动开发,开源,架构,全栈,Android" />
   
 
-  <meta name="description" content="作为Java开发人员，在虚拟机自动内存管理机制的帮助下，不再需要为每一个new操作去写配对的delete/free代码，不容易出现内存泄漏和内存溢出问题，由虚拟机管理内存这一切看似很美好。不过也正由于Java从开发人员将内存控制的权利交给了虚拟机，一旦出现内存泄漏和溢出的问题，如果不了解虚拟机是怎么使用内存的，那么排查错误将成为一项异常艰难的工作。
-运行时数据区域Java虚拟机在执行Java程序的">
+  <meta name="description" content="作为Java开发人员，在虚拟机自动内存管理机制的帮助下，不再需要为每一个new操作去写配对的delete/free代码，不容易出现内存泄漏和内存溢出问题，由虚拟机管理内存这一切看似很美好。不过也正由于Java开发人员将内存控制的权利交给了虚拟机，一旦出现内存泄漏和溢出的问题，如果不了解虚拟机是怎么使用内存的，那么排查错误将成为一项异常艰难的工作。
+运行时数据区域Java虚拟机在执行Java程序的过">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java内存区域(一) 运行时数据区域">
 <meta property="og:url" content="http://yoursite.com/2017/07/10/Java内存区域-一-运行时数据区域/index.html">
 <meta property="og:site_name" content="王白告的Blog">
-<meta property="og:description" content="作为Java开发人员，在虚拟机自动内存管理机制的帮助下，不再需要为每一个new操作去写配对的delete/free代码，不容易出现内存泄漏和内存溢出问题，由虚拟机管理内存这一切看似很美好。不过也正由于Java从开发人员将内存控制的权利交给了虚拟机，一旦出现内存泄漏和溢出的问题，如果不了解虚拟机是怎么使用内存的，那么排查错误将成为一项异常艰难的工作。
-运行时数据区域Java虚拟机在执行Java程序的">
+<meta property="og:description" content="作为Java开发人员，在虚拟机自动内存管理机制的帮助下，不再需要为每一个new操作去写配对的delete/free代码，不容易出现内存泄漏和内存溢出问题，由虚拟机管理内存这一切看似很美好。不过也正由于Java开发人员将内存控制的权利交给了虚拟机，一旦出现内存泄漏和溢出的问题，如果不了解虚拟机是怎么使用内存的，那么排查错误将成为一项异常艰难的工作。
+运行时数据区域Java虚拟机在执行Java程序的过">
 <meta property="og:image" content="http://yoursite.com/2017/07/10/Java内存区域-一-运行时数据区域/./1.jpg">
 <meta property="og:image" content="http://yoursite.com/2017/07/10/Java内存区域-一-运行时数据区域/./2.png">
 <meta property="og:image" content="http://yoursite.com/2017/07/10/Java内存区域-一-运行时数据区域/./3.png">
-<meta property="og:updated_time" content="2017-07-10T08:02:12.000Z">
+<meta property="og:updated_time" content="2017-07-10T15:16:12.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java内存区域(一) 运行时数据区域">
-<meta name="twitter:description" content="作为Java开发人员，在虚拟机自动内存管理机制的帮助下，不再需要为每一个new操作去写配对的delete/free代码，不容易出现内存泄漏和内存溢出问题，由虚拟机管理内存这一切看似很美好。不过也正由于Java从开发人员将内存控制的权利交给了虚拟机，一旦出现内存泄漏和溢出的问题，如果不了解虚拟机是怎么使用内存的，那么排查错误将成为一项异常艰难的工作。
-运行时数据区域Java虚拟机在执行Java程序的">
+<meta name="twitter:description" content="作为Java开发人员，在虚拟机自动内存管理机制的帮助下，不再需要为每一个new操作去写配对的delete/free代码，不容易出现内存泄漏和内存溢出问题，由虚拟机管理内存这一切看似很美好。不过也正由于Java开发人员将内存控制的权利交给了虚拟机，一旦出现内存泄漏和溢出的问题，如果不了解虚拟机是怎么使用内存的，那么排查错误将成为一项异常艰难的工作。
+运行时数据区域Java虚拟机在执行Java程序的过">
 <meta name="twitter:image" content="http://yoursite.com/2017/07/10/Java内存区域-一-运行时数据区域/./1.jpg">
 
   
@@ -108,7 +108,7 @@
 
   <div class="article-content">
     
-      <p>作为Java开发人员，在虚拟机自动内存管理机制的帮助下，不再需要为每一个new操作去写配对的delete/free代码，不容易出现内存泄漏和内存溢出问题，由虚拟机管理内存这一切看似很美好。不过也正由于Java从开发人员将内存控制的权利交给了虚拟机，一旦出现内存泄漏和溢出的问题，如果不了解虚拟机是怎么使用内存的，那么排查错误将成为一项异常艰难的工作。</p>
+      <p>作为Java开发人员，在虚拟机自动内存管理机制的帮助下，不再需要为每一个new操作去写配对的delete/free代码，不容易出现内存泄漏和内存溢出问题，由虚拟机管理内存这一切看似很美好。不过也正由于Java开发人员将内存控制的权利交给了虚拟机，一旦出现内存泄漏和溢出的问题，如果不了解虚拟机是怎么使用内存的，那么排查错误将成为一项异常艰难的工作。</p>
 <h1 id="运行时数据区域"><a href="#运行时数据区域" class="headerlink" title="运行时数据区域"></a>运行时数据区域</h1><p>Java虚拟机在执行Java程序的过程中会把它管理的内存区域划分为若干个不同的数据区域，根据《Java虚拟机规范(Java SE 7版)》的规定，Java虚拟机管理的内存将会包括以下几个运行时数据区域，如下图所示</p>
 <p><img src="/2017/07/10/Java内存区域-一-运行时数据区域/./1.jpg" alt=""></p>
 <p>由上图可以看出编译过的.class文件由类加载器加载到内存中，我们着重看内存的划分区域:</p>
@@ -181,7 +181,7 @@
     <a class="show pull-left" href="/2016/08/28/FFMpeg入门学习-一-视频解码/">
         <i class="icon icon-angle-left"></i>
     </a>
-    <a class="hide pull-right" href="/">
+    <a class="show pull-right" href="/2017/07/10/Java内存区域-二-运行时栈帧结构/">
         <i class="icon icon-angle-right"></i>
     </a>
   </div>
