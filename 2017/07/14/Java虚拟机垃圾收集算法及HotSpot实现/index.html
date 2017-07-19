@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Java虚拟机垃圾收集算法及HotSpot实现 | 王白告的Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="移动开发,开源,架构,全栈,Android" />
+  
+
+  <meta name="description" content="一、垃圾收集算法1. 标记-清除算法(Mark-Sweep)1. 算法思路最基础的垃圾收集算法是“标记-清除”(Mark-Sweep)算法，算法分为“标记”和“清除”两个阶段：首先标记出所有需要回收的对象，在标记完成后统一回收所有被标记的对象，它的标记过程其实就是Java虚拟机垃圾回收基础中生存还是死亡中标记的那个过程。其它收集算法都是基于该思路并对其不足进行改进而来的。标记-清除算法的执行过程如">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java虚拟机垃圾收集算法及HotSpot实现">
+<meta property="og:url" content="http://yoursite.com/2017/07/14/Java虚拟机垃圾收集算法及HotSpot实现/index.html">
+<meta property="og:site_name" content="王白告的Blog">
+<meta property="og:description" content="一、垃圾收集算法1. 标记-清除算法(Mark-Sweep)1. 算法思路最基础的垃圾收集算法是“标记-清除”(Mark-Sweep)算法，算法分为“标记”和“清除”两个阶段：首先标记出所有需要回收的对象，在标记完成后统一回收所有被标记的对象，它的标记过程其实就是Java虚拟机垃圾回收基础中生存还是死亡中标记的那个过程。其它收集算法都是基于该思路并对其不足进行改进而来的。标记-清除算法的执行过程如">
+<meta property="og:image" content="http://yoursite.com/2017/07/14/Java虚拟机垃圾收集算法及HotSpot实现/./1_mark_sweep.png">
+<meta property="og:image" content="http://yoursite.com/2017/07/14/Java虚拟机垃圾收集算法及HotSpot实现/./2_copying.png">
+<meta property="og:updated_time" content="2017-07-15T10:24:51.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java虚拟机垃圾收集算法及HotSpot实现">
+<meta name="twitter:description" content="一、垃圾收集算法1. 标记-清除算法(Mark-Sweep)1. 算法思路最基础的垃圾收集算法是“标记-清除”(Mark-Sweep)算法，算法分为“标记”和“清除”两个阶段：首先标记出所有需要回收的对象，在标记完成后统一回收所有被标记的对象，它的标记过程其实就是Java虚拟机垃圾回收基础中生存还是死亡中标记的那个过程。其它收集算法都是基于该思路并对其不足进行改进而来的。标记-清除算法的执行过程如">
+<meta name="twitter:image" content="http://yoursite.com/2017/07/14/Java虚拟机垃圾收集算法及HotSpot实现/./1_mark_sweep.png">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+
+  <div class="post-header">
+   
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、垃圾收集算法"><span class="toc-text">一、垃圾收集算法</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-标记-清除算法-Mark-Sweep"><span class="toc-text">1. 标记-清除算法(Mark-Sweep)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-算法思路"><span class="toc-text">1. 算法思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-标记-清除算法的缺点："><span class="toc-text">2. 标记-清除算法的缺点：</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-应用场景"><span class="toc-text">3. 应用场景</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-复制算法-Copying"><span class="toc-text">2. 复制算法(Copying)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-算法思路"><span class="toc-text">2.1 算法思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-复制算法的优缺点"><span class="toc-text">2.2 复制算法的优缺点</span></a></li></ol></li></ol></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-Java虚拟机垃圾收集算法及HotSpot实现" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Java虚拟机垃圾收集算法及HotSpot实现</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2017.07.14</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>王白告</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="一、垃圾收集算法"><a href="#一、垃圾收集算法" class="headerlink" title="一、垃圾收集算法"></a>一、垃圾收集算法</h1><h2 id="1-标记-清除算法-Mark-Sweep"><a href="#1-标记-清除算法-Mark-Sweep" class="headerlink" title="1. 标记-清除算法(Mark-Sweep)"></a>1. 标记-清除算法(Mark-Sweep)</h2><h3 id="1-算法思路"><a href="#1-算法思路" class="headerlink" title="1. 算法思路"></a>1. 算法思路</h3><p>最基础的垃圾收集算法是“标记-清除”(Mark-Sweep)算法，算法分为“标记”和“清除”两个阶段：首先标记出所有需要回收的对象，在标记完成后统一回收所有被标记的对象，它的标记过程其实就是<a href="https://eterualrb.github.io/2017/07/13/Java%E8%99%9A%E6%8B%9F%E6%9C%BA%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%9F%BA%E7%A1%80/#2-4-生存还是死亡" target="_blank" rel="external">Java虚拟机垃圾回收基础中生存还是死亡</a>中标记的那个过程。其它收集算法都是基于该思路并对其不足进行改进而来的。标记-清除算法的执行过程如下图所示</p>
+<p><img src="/2017/07/14/Java虚拟机垃圾收集算法及HotSpot实现/./1_mark_sweep.png" alt=""></p>
+<h3 id="2-标记-清除算法的缺点："><a href="#2-标记-清除算法的缺点：" class="headerlink" title="2. 标记-清除算法的缺点："></a>2. 标记-清除算法的缺点：</h3><ul>
+<li>效率问题，标记和清除两个过程效率都不高</li>
+<li>空间问题，标记清除之后会产生大量不连续的内存碎片，空间碎片太多可能导致以后在程序运行过程中需要分配较大对象时，无法找到足够的连续内存而提前触发另一次垃圾收集动作</li>
+</ul>
+<h3 id="3-应用场景"><a href="#3-应用场景" class="headerlink" title="3. 应用场景"></a>3. 应用场景</h3><p>针对老年代的CMS收集器</p>
+<h2 id="2-复制算法-Copying"><a href="#2-复制算法-Copying" class="headerlink" title="2. 复制算法(Copying)"></a>2. 复制算法(Copying)</h2><h3 id="2-1-算法思路"><a href="#2-1-算法思路" class="headerlink" title="2.1 算法思路"></a>2.1 算法思路</h3><p>复制收集算法是为了解决标记-清除算法的效率问题而出现的。它将可用内存按容量划分为大小相等的两块，每次只使用其中的一块。当一块内存用完了，就将还存活着的对象复制到另外一块上面，然后再把已使用过的内存空间一次清理掉。这样每次都是对整个半区进行内存回收，内存分配时也不用考虑内存碎片等复杂情况，只要移动指针按顺序分配即可。<strong>目前商业虚拟机都采用这个复制收集算法来回收新生代</strong>。复制算法的执行过程如下图所示</p>
+<p><img src="/2017/07/14/Java虚拟机垃圾收集算法及HotSpot实现/./2_copying.png" alt=""></p>
+<h3 id="2-2-复制算法的优缺点"><a href="#2-2-复制算法的优缺点" class="headerlink" title="2.2 复制算法的优缺点"></a>2.2 复制算法的优缺点</h3><ul>
+<li><p>优点：实现简单，运行高效；每次都只对整个半区进行内存回收；不需要考虑内存碎片问题，可以使用“指针碰撞”方式分配内存</p>
+</li>
+<li><p>缺点：</p>
+<p>将内存缩小为原来的一半，空间利用率低(解决方案：不按1：1比例划分)</p>
+<p>当对象存活率较高时，需要进行较多次复制操作，效率随对象存活率升高而降低(解决方案：标记-整理算法)</p>
+</li>
+</ul>
+
+    
+  </div>
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2017/07/13/Java虚拟机垃圾回收基础/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2017/07/19/Android-ListView-工作原理分析笔记/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>

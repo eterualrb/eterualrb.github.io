@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>ThreadPoolExecutor | 王白告的Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="移动开发,开源,架构,全栈,Android" />
+  
+
+  <meta name="description" content="一、ThreadPoolExecutor详解Executor框架最核心的类是ThreadPoolExecutor，它是线程池的实现类。它的构造方法提供了一系列参数来配置线程池
+1234567public ThreadPoolExecutor(int corePoolSize,                          int maximumPoolSize,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ThreadPoolExecutor">
+<meta property="og:url" content="http://yoursite.com/2016/07/16/ThreadPoolExecutor/index.html">
+<meta property="og:site_name" content="王白告的Blog">
+<meta property="og:description" content="一、ThreadPoolExecutor详解Executor框架最核心的类是ThreadPoolExecutor，它是线程池的实现类。它的构造方法提供了一系列参数来配置线程池
+1234567public ThreadPoolExecutor(int corePoolSize,                          int maximumPoolSize,">
+<meta property="og:image" content="http://yoursite.com/2016/07/16/ThreadPoolExecutor/./1.png">
+<meta property="og:image" content="http://yoursite.com/2016/07/16/ThreadPoolExecutor/./2.png">
+<meta property="og:image" content="http://yoursite.com/2016/07/16/ThreadPoolExecutor/./3.png">
+<meta property="og:updated_time" content="2017-07-17T06:59:30.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ThreadPoolExecutor">
+<meta name="twitter:description" content="一、ThreadPoolExecutor详解Executor框架最核心的类是ThreadPoolExecutor，它是线程池的实现类。它的构造方法提供了一系列参数来配置线程池
+1234567public ThreadPoolExecutor(int corePoolSize,                          int maximumPoolSize,">
+<meta name="twitter:image" content="http://yoursite.com/2016/07/16/ThreadPoolExecutor/./1.png">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+
+  <div class="post-header">
+   
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、ThreadPoolExecutor详解"><span class="toc-text">一、ThreadPoolExecutor详解</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、线程池的分类"><span class="toc-text">二、线程池的分类</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-FixedThreadPool"><span class="toc-text">1. FixedThreadPool</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-CachedThreadPool"><span class="toc-text">2. CachedThreadPool</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-SingleThreadExecutor"><span class="toc-text">3. SingleThreadExecutor</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-ScheduledThreadPool"><span class="toc-text">4. ScheduledThreadPool</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-ThreadPoolExecutor" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">ThreadPoolExecutor</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2016.07.16</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>王白告</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="一、ThreadPoolExecutor详解"><a href="#一、ThreadPoolExecutor详解" class="headerlink" title="一、ThreadPoolExecutor详解"></a>一、ThreadPoolExecutor详解</h1><p>Executor框架最核心的类是ThreadPoolExecutor，它是线程池的实现类。它的构造方法提供了一系列参数来配置线程池</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></div><div class="line">                          <span class="keyword">int</span> maximumPoolSize,</div><div class="line">                          <span class="keyword">long</span> keepAliveTime,</div><div class="line">                          TimeUnit unit,</div><div class="line">                          BlockingQueue&lt;Runnable&gt; workQueue,</div><div class="line">                          ThreadFactory threadFactory,</div><div class="line">                          RejectedExecutionHandler handler)</div></pre></td></tr></table></figure>
+<ul>
+<li>corePoolSize：线程池的核心线程数。默认情况下，核心线程会在线程池中一直存活，即使它们处于闲置状态，如果将ThreadPoolExecutor的allowCoreThreadTimeOut属性设置为true，那么闲置的核心线程在等待新任务到来时会有超时策略，这个时间间隔由keepAliveTime指定，当等待时间超过keepAliveTime所指定的时长后，核心线程就会被终止</li>
+<li>maximumPoolSize：线程池所能容纳的最大线程数，当活动线程数达到这个数值后，后续的新任务将会被阻塞。但如果使用了无界的任务队列这个参数就没有什么效果了</li>
+<li>keepAliveTime：非核心线程闲置时的超时时长，超过这个时长，非核心线程就会被回收，当ThreadPoolExecutor的allowCoreThreadTimeOut属性设置为true时，keepAliveTime同样会作用于核心线程</li>
+<li>unit：用于指定keepAliveTime参数的时间单位。常用的有TimeUnit.MILLISECONDS，TimeUnit.SECONDS以及TimeUnit.MINUTES等</li>
+<li>workQueue：用于保存等待执行的任务的阻塞队列，通过线程池的execute方法提交的Runnable对象会存储在这个队列中</li>
+<li>threadFactory：线程工厂，为线程池提供创建新线程的功能，通过线程工厂可以给每个创建出来的线程设置更有意义的名字</li>
+<li>handler：饱和策略。当线程池无法执行新任务时(任务队列已满或者无法成功执行任务)，此时ThreadPoolExecutor会调用handler的rejectedExecution方法来通知调用者。默认的饱和策略是AbortPolicy(直接抛出异常)，它会直接抛出RejectedExecutionException。由于这个参数不经常使用，所以其它的饱和策略这里就不再详解了</li>
+</ul>
+<p><strong>ThreadPoolExecutor在执行任务时大致遵循如下规则：</strong></p>
+<ul>
+<li>1）如果线程池中的线程数量未达到核心线程的数量，那么会直接启动一个核心线程来执行任务</li>
+<li>2）如果线程池中的线程数量已经达到或超过核心线程的数量，那么任务会被插入到任务队列中排队等待执行</li>
+<li>3）如果在步骤2）中无法将任务插入到任务队列中，这往往是由于任务队列已满，这时如果线程数量未达到线程池规定的最大值，那么会立刻启动一个非核心线程来执行任务</li>
+<li>4）如果步骤3）中线程数量已达到线程池规定的最大值，那么就拒绝执行此任务，ThreadPoolExecutor会调用RejectedExecutionHandler的rejectedExecution方法来通知调用者</li>
+</ul>
+<h1 id="二、线程池的分类"><a href="#二、线程池的分类" class="headerlink" title="二、线程池的分类"></a>二、线程池的分类</h1><h2 id="1-FixedThreadPool"><a href="#1-FixedThreadPool" class="headerlink" title="1. FixedThreadPool"></a>1. FixedThreadPool</h2><p>通过Executors的newFixedThreadPool方法创建，它是一种线程数量固定的线程池</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newFixedThreadPool</span><span class="params">(<span class="keyword">int</span> nThreads)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(nThreads, </div><div class="line">                                  nThreads,</div><div class="line">                                  <span class="number">0L</span>, </div><div class="line">                                  TimeUnit.MILLISECONDS,</div><div class="line">                                  <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>FixedThreadPool的corePoolSize和maximumPoolSize都被设置成指定的参数nThreads</li>
+</ul>
+<ul>
+<li>keepAliveTime设置为0，意味着如果当线程池中的线程数大于corePoolSize时，多余的空闲线程会被立即终止，也从侧面保证了线程池中只有核心线程在运行</li>
+<li>workQueue被设置成了无界队列LinkedBlockingQueue(容量为Integer.MAX_VALUE)，则说明线程池不会拒绝任务(不会调用RejectedExecutionHandler.rejectedExecution方法)</li>
+</ul>
+<p>FixedThreadPool的运行示意图如下：</p>
+<p><img src="/2016/07/16/ThreadPoolExecutor/./1.png" alt=""></p>
+<p>FixedThreadPool的特点：</p>
+<p>当线程处于空闲状态时，它们并不会被回收，除非线程池被关闭。当所有的线程都处于活动状态时，新任务都会处于等待状态，直到有线程空闲出来。由于其只有核心线程并且这些核心线程不会被回收，这意味着它能够更加快速地相应外界请求。从创建方法也可以看出其只有核心线程且这些核心线程没有超时机制，另外任务队列也是没有大小限制的</p>
+<h2 id="2-CachedThreadPool"><a href="#2-CachedThreadPool" class="headerlink" title="2. CachedThreadPool"></a>2. CachedThreadPool</h2><p>通过Executors的newCachedThreadPool方法创建，它是一种线程数量不定的线程池</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newCachedThreadPool</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">0</span>, </div><div class="line">                                  Integer.MAX_VALUE,</div><div class="line">                                  <span class="number">60L</span>, </div><div class="line">                                  TimeUnit.SECONDS,</div><div class="line">                                  <span class="keyword">new</span> SynchronousQueue&lt;Runnable&gt;());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>corePoolSize设置为0，意味着线程池中没有核心线程</li>
+<li>maximumPoolSize设置为Integer.MAX_VALUE，意味着线程池中的线程数可以任意大，不固定。当线程池中所有线程都处于活动状态时，会创建新线程来处理任务，否则就会利用空闲的线程来处理任务</li>
+<li>keepAliveTime设置为60，意味着线程池中的空闲线程的超时机制的超时时长设置为60s，超过60s闲置线程就会被回收</li>
+<li>workQueue设置为SynchronousQueue(一个不存储元素的阻塞队列)，可以认为它是一个空集合，这将导致任何任务都会被立即执行</li>
+</ul>
+<p>CachedThreadPool的执行示意图如下：</p>
+<p><img src="/2016/07/16/ThreadPoolExecutor/./2.png" alt=""></p>
+<p>CachedThreadPool的特点：</p>
+<p>这类线程池比较适合执行大量的耗时较少的任务。当整个线程池都处于闲置状态时，线程池中的线程都会超时而被停止，此时CachedThreadPool中实际上是没有任何线程的，它几乎不占用任何系统资源</p>
+<h2 id="3-SingleThreadExecutor"><a href="#3-SingleThreadExecutor" class="headerlink" title="3. SingleThreadExecutor"></a>3. SingleThreadExecutor</h2><p>通过Executors的newSingleThreadExecutor方法来创建，这类线程池内部只有一个核心线程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newSingleThreadExecutor</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> FinalizableDelegatedExecutorService</div><div class="line">        (<span class="keyword">new</span> ThreadPoolExecutor(<span class="number">1</span>, </div><div class="line">                                <span class="number">1</span>,</div><div class="line">                                <span class="number">0L</span>, </div><div class="line">                                TimeUnit.MILLISECONDS,</div><div class="line">                                <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;()));</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>SingleThreadExecutor的corePoolSize和maximumPoolSize都被设置为1，意味着线程池中只有一个线程(核心线程)</li>
+<li>keepAliveTime被设置为0，也从侧面保证了线程池中只有一个核心线程</li>
+<li>workQueue被设置为无界队列LinkedBlockingQueue，意味着线程池不会拒绝任务</li>
+</ul>
+<p>SingleThreadExecutor执行示意图如下：</p>
+<p><img src="/2016/07/16/ThreadPoolExecutor/./3.png" alt=""></p>
+<p>SingleThreadExecutor的特点：</p>
+<p>这类线程池内部只有一个核心线程，它确保所有的任务都在同一个线程中按顺序执行。SingleThreadExecutor的意义在于统一所有的外界任务到一个线程中，这使得在这些任务之间不需要处理线程同步的问题</p>
+<h2 id="4-ScheduledThreadPool"><a href="#4-ScheduledThreadPool" class="headerlink" title="4. ScheduledThreadPool"></a>4. ScheduledThreadPool</h2><p>通过Executors的newScheduledThreadPool方法创建。它的核心线程数量是固定的，而非核心线程数是没有限制的，并且当非核心线程闲置时会被立即回收</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ScheduledExecutorService <span class="title">newScheduledThreadPool</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ScheduledThreadPoolExecutor(corePoolSize);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">ScheduledThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</div><div class="line">    <span class="keyword">super</span>(corePoolSize, </div><div class="line">    	  Integer.MAX_VALUE,</div><div class="line">          DEFAULT_KEEPALIVE_MILLIS, </div><div class="line">          MILLISECONDS,</div><div class="line">          <span class="keyword">new</span> DelayedWorkQueue());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这类线程池主要用于执行定时任务和具有固定周期的重复任务，功能与Timer类似，但比Timer功能更强大，更灵活。Timer对应的是单个后台线程，而ScheduledThreadPoolExecutor可以在构造函数中指定多个对应的后台线程数</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li>《Android开发艺术探索》</li>
+<li>《Java并发编程的艺术》</li>
+</ul>
+
+    
+  </div>
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2016/07/15/Java中的线程池和Executor框架/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2016/07/17/Java并发编程-Future/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
