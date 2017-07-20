@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android并发编程之AsyncTask | 王白告的Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="移动开发,开源,架构,全栈,Android" />
+  
+
+  <meta name="description" content="一、AsyncTask简介AsyncTask是一种轻量级的异步任务类，它可以在线程池中执行后台任务，然后把执行的进度和最终结果传递给主线程并在主线程中更新UI。从实现上来说，AsyncTask封装了Thread和Handler，通过AsyncTask可以更加方便地执行后台任务以及在主线程中访问UI，但是AsyncTask并不适合进行特别耗时的后台任务，对于特别耗时的任务来说，建议使用线程池
+二、A">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android并发编程之AsyncTask">
+<meta property="og:url" content="http://yoursite.com/2016/07/19/Android并发编程之AsyncTask/index.html">
+<meta property="og:site_name" content="王白告的Blog">
+<meta property="og:description" content="一、AsyncTask简介AsyncTask是一种轻量级的异步任务类，它可以在线程池中执行后台任务，然后把执行的进度和最终结果传递给主线程并在主线程中更新UI。从实现上来说，AsyncTask封装了Thread和Handler，通过AsyncTask可以更加方便地执行后台任务以及在主线程中访问UI，但是AsyncTask并不适合进行特别耗时的后台任务，对于特别耗时的任务来说，建议使用线程池
+二、A">
+<meta property="og:updated_time" content="2017-07-19T14:30:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android并发编程之AsyncTask">
+<meta name="twitter:description" content="一、AsyncTask简介AsyncTask是一种轻量级的异步任务类，它可以在线程池中执行后台任务，然后把执行的进度和最终结果传递给主线程并在主线程中更新UI。从实现上来说，AsyncTask封装了Thread和Handler，通过AsyncTask可以更加方便地执行后台任务以及在主线程中访问UI，但是AsyncTask并不适合进行特别耗时的后台任务，对于特别耗时的任务来说，建议使用线程池
+二、A">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+
+  <div class="post-header">
+   
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#一、AsyncTask简介"><span class="toc-text">一、AsyncTask简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#二、AsyncTask的使用"><span class="toc-text">二、AsyncTask的使用</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#三、AsyncTask的源码分析"><span class="toc-text">三、AsyncTask的源码分析</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#四、AsyncTask的注意事项"><span class="toc-text">四、AsyncTask的注意事项</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-Android并发编程之AsyncTask" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Android并发编程之AsyncTask</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2016.07.19</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>王白告</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <h1 id="一、AsyncTask简介"><a href="#一、AsyncTask简介" class="headerlink" title="一、AsyncTask简介"></a>一、AsyncTask简介</h1><p>AsyncTask是一种轻量级的异步任务类，它可以在线程池中执行后台任务，然后把执行的进度和最终结果传递给主线程并在主线程中更新UI。从实现上来说，AsyncTask封装了Thread和Handler，通过AsyncTask可以更加方便地执行后台任务以及在主线程中访问UI，但是AsyncTask并不适合进行特别耗时的后台任务，对于特别耗时的任务来说，建议使用线程池</p>
+<h1 id="二、AsyncTask的使用"><a href="#二、AsyncTask的使用" class="headerlink" title="二、AsyncTask的使用"></a>二、AsyncTask的使用</h1><p>AsyncTask是一个抽象的泛型类，如果要使用它，必须创建一个子类去继承它。它提供了三个泛型参数</p>
+<ul>
+<li>Params：在执行AsyncTask时传入参数的类型</li>
+<li>Progress：后台任务执行进度的类型</li>
+<li>Result：后台任务返回结果的类型</li>
+</ul>
+<p>如果AsyncTask不需要传递具体的参数，那这三个泛型参数可以使用Void来代替。一个最简单的自定义AsyncTask如下所示</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyTask</span> <span class="keyword">extends</span> <span class="title">AsyncTask</span>&lt;<span class="title">Void</span>, <span class="title">Integer</span>, <span class="title">Boolean</span>&gt; </span>&#123;</div><div class="line">	<span class="comment">// other code ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>AsyncTask的四个核心方法</p>
+<ul>
+<li>onPreExecute()：主线程中执行，通常用于异步任务执行前做一些初始化工作</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Runs on the UI thread before &#123;<span class="doctag">@link</span> #doInBackground&#125;.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@see</span> #onPostExecute</div><div class="line"> * <span class="doctag">@see</span> #doInBackground</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPreExecute</span><span class="params">()</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>doInBackground(Params… params)：在线程池中执行异步任务，params参数表示异步任务的输入参数；在此方法中可以通过publishProgress方法来更新任务的进度，publishProgress方法会调用onProgressUpdate方法；此方法的返回结果会给onPostExecute方法使用</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Override this method to perform a computation on a background thread. The</div><div class="line"> * specified parameters are the parameters passed to &#123;<span class="doctag">@link</span> #execute&#125;</div><div class="line"> * by the caller of this task.</div><div class="line"> *</div><div class="line"> * This method can call &#123;<span class="doctag">@link</span> #publishProgress&#125; to publish updates</div><div class="line"> * on the UI thread.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span> params The parameters of the task.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@return</span> A result, defined by the subclass of this task.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@see</span> #onPreExecute()</div><div class="line"> * <span class="doctag">@see</span> #onPostExecute</div><div class="line"> * <span class="doctag">@see</span> #publishProgress</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">abstract</span> Result <span class="title">doInBackground</span><span class="params">(Params... params)</span></span>;</div></pre></td></tr></table></figure>
+<ul>
+<li>onProgressUpdate(Progress… values)：在主线程中执行，当后台任务的执行进度发生改变时此方法会被调用</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * Runs on the UI thread after &#123;<span class="doctag">@link</span> #publishProgress&#125; is invoked.</div><div class="line"> * The specified values are the values passed to &#123;<span class="doctag">@link</span> #publishProgress&#125;.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span> values The values indicating progress.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@see</span> #publishProgress</div><div class="line"> * <span class="doctag">@see</span> #doInBackground</div><div class="line"> */</div><div class="line"><span class="meta">@SuppressWarnings</span>(&#123;<span class="string">"UnusedDeclaration"</span>&#125;)</div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onProgressUpdate</span><span class="params">(Progress... values)</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<ul>
+<li>onPostExecute(Result result)：在主线程中执行，在异步任务执行之后，此方法会被调用，其中result参数是后台任务的返回值，即doInBackground的返回值</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * &lt;p&gt;Runs on the UI thread after &#123;<span class="doctag">@link</span> #doInBackground&#125;. The</div><div class="line"> * specified result is the value returned by &#123;<span class="doctag">@link</span> #doInBackground&#125;.&lt;/p&gt;</div><div class="line"> * </div><div class="line"> * &lt;p&gt;This method won't be invoked if the task was cancelled.&lt;/p&gt;</div><div class="line"> *</div><div class="line"> * <span class="doctag">@param</span> result The result of the operation computed by &#123;<span class="doctag">@link</span> #doInBackground&#125;.</div><div class="line"> *</div><div class="line"> * <span class="doctag">@see</span> #onPreExecute</div><div class="line"> * <span class="doctag">@see</span> #doInBackground</div><div class="line"> * <span class="doctag">@see</span> #onCancelled(Object) </div><div class="line"> */</div><div class="line"><span class="meta">@SuppressWarnings</span>(&#123;<span class="string">"UnusedDeclaration"</span>&#125;)</div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onPostExecute</span><span class="params">(Result result)</span> </span>&#123;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面的方法中，onPreExecute先执行，接着是doInBackground，最后才是onPostExecute。除此之外AsyncTask还提供了onCancelled()方法，它同样在主线程中执行，当异步任务被取消时，onCancelled()方法会被调用，此时onPostExecute则不会再被调用了</p>
+<h1 id="三、AsyncTask的源码分析"><a href="#三、AsyncTask的源码分析" class="headerlink" title="三、AsyncTask的源码分析"></a>三、AsyncTask的源码分析</h1><h1 id="四、AsyncTask的注意事项"><a href="#四、AsyncTask的注意事项" class="headerlink" title="四、AsyncTask的注意事项"></a>四、AsyncTask的注意事项</h1>
+    
+  </div>
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2016/07/17/Java并发编程-Future/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2016/08/23/git查看文件修改纪录-可视化工具/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
