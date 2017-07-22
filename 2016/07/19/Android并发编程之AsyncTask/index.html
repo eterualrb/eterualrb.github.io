@@ -23,7 +23,7 @@
 <meta property="og:site_name" content="王白告的Blog">
 <meta property="og:description" content="一、AsyncTask简介AsyncTask是一种轻量级的异步任务类，它可以在线程池中执行后台任务，然后把执行的进度和最终结果传递给主线程并在主线程中更新UI。从实现上来说，AsyncTask封装了Thread和Handler，通过AsyncTask可以更加方便地执行后台任务以及在主线程中访问UI，但是AsyncTask并不适合进行特别耗时的后台任务，对于特别耗时的任务来说，建议使用线程池
 二、A">
-<meta property="og:updated_time" content="2017-07-20T13:30:19.000Z">
+<meta property="og:updated_time" content="2017-07-22T01:58:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Android并发编程之AsyncTask">
 <meta name="twitter:description" content="一、AsyncTask简介AsyncTask是一种轻量级的异步任务类，它可以在线程池中执行后台任务，然后把执行的进度和最终结果传递给主线程并在主线程中更新UI。从实现上来说，AsyncTask封装了Thread和Handler，通过AsyncTask可以更加方便地执行后台任务以及在主线程中访问UI，但是AsyncTask并不适合进行特别耗时的后台任务，对于特别耗时的任务来说，建议使用线程池
@@ -164,7 +164,10 @@
 </ul>
 <p>谷歌之所以在3.0后对AsyncTask进行这样的设计，是为了让AsyncTask的使用更加灵活。如果我们要并发执行异步任务，可以自己去创建一个线程池，而不是使用默认的线程池。例如</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">Executor exec = <span class="keyword">new</span> ThreadPoolExecutor(</div><div class="line">      <span class="number">20</span>, </div><div class="line">      <span class="number">200</span>, </div><div class="line">      <span class="number">20</span>,</div><div class="line">      TimeUnit.SECONDS, </div><div class="line">      <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;());</div><div class="line"><span class="keyword">new</span> MyAsyncTask().executeOnExecutor(exec);</div></pre></td></tr></table></figure>
-<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="http://blog.csdn.net/guolin_blog/article/details/11711405" target="_blank" rel="external">http://blog.csdn.net/guolin_blog/article/details/11711405</a></p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li><a href="http://blog.csdn.net/guolin_blog/article/details/11711405" target="_blank" rel="external">http://blog.csdn.net/guolin_blog/article/details/11711405</a></li>
+<li>《Android开发艺术探索》</li>
+</ul>
 
     
   </div>
@@ -178,7 +181,7 @@
     <a class="show pull-left" href="/2016/07/17/Java并发编程-Future/">
         <i class="icon icon-angle-left"></i>
     </a>
-    <a class="show pull-right" href="/2016/08/23/git查看文件修改纪录-可视化工具/">
+    <a class="show pull-right" href="/2016/07/22/Android并发编程之HandlerThread/">
         <i class="icon icon-angle-right"></i>
     </a>
   </div>
