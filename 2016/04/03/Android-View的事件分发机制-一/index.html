@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android View的事件分发机制(一) | 王白告的Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="移动开发,开源,架构,全栈,Android" />
+  
+
+  <meta name="description" content="首先我们要明白View事件分发的对象是MotionEvent，即点击事件。当一个MotionEvent产生后系统需要把这个事件传递给一个具体的View，而这个传递过程就是分发过程。点击事件的分发过程由三个重要方法共同完成
+1public boolean dispatchTouchEvent(MotionEvent ev)
+dispatchTouchEvent用来进行事件的分发。如果事件能够传递给当">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android View的事件分发机制(一)">
+<meta property="og:url" content="http://yoursite.com/2016/04/03/Android-View的事件分发机制-一/index.html">
+<meta property="og:site_name" content="王白告的Blog">
+<meta property="og:description" content="首先我们要明白View事件分发的对象是MotionEvent，即点击事件。当一个MotionEvent产生后系统需要把这个事件传递给一个具体的View，而这个传递过程就是分发过程。点击事件的分发过程由三个重要方法共同完成
+1public boolean dispatchTouchEvent(MotionEvent ev)
+dispatchTouchEvent用来进行事件的分发。如果事件能够传递给当">
+<meta property="og:updated_time" content="2017-07-31T13:49:46.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android View的事件分发机制(一)">
+<meta name="twitter:description" content="首先我们要明白View事件分发的对象是MotionEvent，即点击事件。当一个MotionEvent产生后系统需要把这个事件传递给一个具体的View，而这个传递过程就是分发过程。点击事件的分发过程由三个重要方法共同完成
+1public boolean dispatchTouchEvent(MotionEvent ev)
+dispatchTouchEvent用来进行事件的分发。如果事件能够传递给当">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+
+  <div class="post-header">
+   
+
+</div>
+
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-Android-View的事件分发机制-一" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Android View的事件分发机制(一)</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2016.04.03</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>王白告</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>首先我们要明白View事件分发的对象是MotionEvent，即点击事件。当一个MotionEvent产生后系统需要把这个事件传递给一个具体的View，而这个传递过程就是分发过程。点击事件的分发过程由三个重要方法共同完成</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">dispatchTouchEvent</span><span class="params">(MotionEvent ev)</span></span></div></pre></td></tr></table></figure>
+<p>dispatchTouchEvent用来进行事件的分发。如果事件能够传递给当前View，此方法一定会被调用，返回结果受当前View的onTouchEvent和下级的dispatchTouchEvent方法的影响，表示是否消耗当前事件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onInterceptTouchEvent</span><span class="params">(MotionEvent ev)</span></span></div></pre></td></tr></table></figure>
+<p>onInterceptTouchEvent在dispatchTouchEvent中调用，用来判断是否拦截某个事件，如果当前View拦截了某个事件，那么在同一个事件序列中，此方法不会被再次调用，返回结果表示是否拦截当前事件</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span></span></div></pre></td></tr></table></figure>
+<p>在dispatchTouchEvent方法中调用，用来处理点击事件，返回结果表示是否消耗当前事件，如果不消耗，则在同一个事件序列中，当前View无法再次接收到事件</p>
+<p>伪代码表示上面三个方法关系</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">dispatchTouchEvent</span><span class="params">(MotionEvent ev)</span> </span>&#123;</div><div class="line">   <span class="keyword">boolean</span> consume = <span class="keyword">false</span>;</div><div class="line">   <span class="keyword">if</span> (onInterceptTouchEvent(ev)) &#123;</div><div class="line">      consume = onTouchEvent(ev);</div><div class="line">   &#125; <span class="keyword">else</span> &#123;</div><div class="line">      consume = child.dispatchTouchEvent(ev);</div><div class="line">   &#125;</div><div class="line"></div><div class="line">   <span class="keyword">return</span> consume;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>对于一个根ViewGroup来说，点击事件产生后，首先会传递给它，此时它的dispatchTouchEvent就会被调用，如果这个ViewGroup的onInterceptTouchEvent方法返回true就表示它要拦截当前事件，接着事件就会交给这个ViewGroup处理，即它的onTouchEvent方法会被调用；如果这个ViewGroup的onInterceptTouchEvent方法返回false就表示它不拦截当前事件，这时当前事件就会继续传递给它的子元素，接着子元素的dispatchTouchEvent方法就会被调用，如此反复直到事件最终被处理</p>
+<p>当一个View需要处理事件时，如果它设置了OnTouchListener，那么OnTouchListener中的OnTouch方法会被回调，这时事件如何处理还要看onTouch的返回值，如果返回false，则当前View的onTouchEvent方法会被调用；如果返回true，那么onTouchEvent方法将不会被调用。由此可见，给View设置的OnTouchListener，其优先级比onTouchEvent要高。在onTouchEvent方法中，如果当前设置的有OnClickListener，那么它的onClick方法会被调用，所以OnClickListener其优先级最低，即处于事件传递的尾端</p>
+<p>当一个点击事件产生后，它的传递过程遵循如下顺序：Activity-&gt;Window-&gt;View，即事件总是先传递给Activity，Activity再传递给Window，最后Window再传递给顶级View，顶级View接收到事件后，就会按照事件分发机制去分发事件。如果一个View的onTouchEvent返回了false，那么它的父容器的onTouchEvent将会被调用，以此类推。如果所有的元素都不处理这个事件，那么这个事件将会最终传递给Activity处理，即Activity的onTouchEvent方法会被调用</p>
+<p><strong>事件传递机制结论：</strong></p>
+<ul>
+<li>(1)同一个事件序列是指从手指接触屏幕的那一刻起，到手指离开屏幕的那一刻结束，在这个过程中所产生的一系列事件，这个事件序列以down事件开始，中间含有数量不定的move事件，最终以up事件结束</li>
+<li>(2)正常情况下，一个事件序列只能被一个View拦截且消耗，这一条原因可以参考(3)，因为一旦一个元素拦截了某此事件，那么同一个事件序列内的所有事件都会直接交给它处理，因此同一个事件序列中的事件不能分别由两个View同时处理</li>
+<li>(3)某个View一旦决定拦截，那么这一个事件序列都只能由它来处理(如果事件序列能够传递给它的话)，并且它的onInterceptTouchEvent不会再被调用。即当一个View决定拦截一个事件后，那么系统会把同一个事件序列内的其它方法都直接交给它来处理，因此就不用再调用这个View的onInterceptTouchEvent去询问它是否要拦截了</li>
+<li>(4)某个View一旦开始处理事件，如果它不消耗ACTION_DOWN事件(onTouchEvent返回了false)，那么同一事件序列中的其它事件都不会再交给它来处理，并且事件将重新交给它的父元素去处理，即父元素的onTouchEvent会被调用。即事件一旦交给一个View处理，那么它就必须消耗掉，否则同一事件序列中剩下的事件就不再交给它来处理了</li>
+<li>(5)如果View不消耗除ACTION_DOWN以外的其它事件，那么这个点击事件会消失，此时父元素的onTouchEvent并不会被调用，并且当前View可以持续收到后续的事件，最终这些消失的点击事件会传递给Activity处理</li>
+<li>(6)ViewGroup默认不拦截任何事件。Android源码中ViewGroup的onInterceptTouchEvent方法默认返回false</li>
+<li>(7)View没有onInterceptTouchEvent方法，一旦有点击事件传递给它，那么它的onTouchEvent方法就会被调用</li>
+<li>(8)View的onTouchEvent默认都会消耗事件(返回true)，除非它是不可点击的(clickable和longClickable同时为false)。View的longClickable属性默认都为false，clickable属性要分情况，比如Button的clickable属性默认为true，而TextView的clickable属性默认为false</li>
+<li>(9)View的enable属性不影响onTouchEvent的默认返回值。哪怕一个View是disable状态的，只要它的clickable或者longClickable有一个为true，那么它的onTouchEvent就返回true</li>
+<li>(10)onClick会发生的前提是当前View是可点击的，并且它收到了down和up的事件</li>
+<li>(11)事件传递过程是由外向内的，即事件总是先传递给父元素，然后再由父元素分发给子View，通过requestDisallowInterceptTouchEvent方法可以在子元素中干预父元素的事件分发过程，但是ACTION_DOWN事件除外</li>
+</ul>
+<p><strong>参考</strong></p>
+<ul>
+<li>《Android开发艺术探索》</li>
+</ul>
+
+    
+  </div>
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2016/04/01/Android-Scroller解析/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2016/07/15/Java中的线程池和Executor框架/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
