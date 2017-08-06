@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android 理解MeasureSpec | 王白告的Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="移动开发,开源,架构,全栈,Android" />
+  
+
+  <meta name="description" content="MeasureSpec的意思是“测量规格”，它在很大程度上决定了一个View的尺寸规格，之所以说是很大程度上是因为这个过程还受父容器的影响，因为父容器影响View的MeasureSpec的创建过程。在测量过程中，系统会将View的LayoutParams根据父容器所施加的规则转化成对应的MeasureSpec，然后再根据这个measureSpec来测量出View的宽/高。这里的宽/高是测量宽/高，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android 理解MeasureSpec">
+<meta property="og:url" content="http://yoursite.com/2016/04/06/Android-理解MeasureSpec/index.html">
+<meta property="og:site_name" content="王白告的Blog">
+<meta property="og:description" content="MeasureSpec的意思是“测量规格”，它在很大程度上决定了一个View的尺寸规格，之所以说是很大程度上是因为这个过程还受父容器的影响，因为父容器影响View的MeasureSpec的创建过程。在测量过程中，系统会将View的LayoutParams根据父容器所施加的规则转化成对应的MeasureSpec，然后再根据这个measureSpec来测量出View的宽/高。这里的宽/高是测量宽/高，">
+<meta property="og:image" content="http://yoursite.com/2016/04/06/Android-理解MeasureSpec/./1.png">
+<meta property="og:updated_time" content="2017-08-06T07:01:57.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android 理解MeasureSpec">
+<meta name="twitter:description" content="MeasureSpec的意思是“测量规格”，它在很大程度上决定了一个View的尺寸规格，之所以说是很大程度上是因为这个过程还受父容器的影响，因为父容器影响View的MeasureSpec的创建过程。在测量过程中，系统会将View的LayoutParams根据父容器所施加的规则转化成对应的MeasureSpec，然后再根据这个measureSpec来测量出View的宽/高。这里的宽/高是测量宽/高，">
+<meta name="twitter:image" content="http://yoursite.com/2016/04/06/Android-理解MeasureSpec/./1.png">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+
+  <div class="post-header">
+   
+
+</div>
+
+
+  <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-MeasureSpec"><span class="toc-text">1. MeasureSpec</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-MeasureSpec和LayoutParams的对应关系"><span class="toc-text">2. MeasureSpec和LayoutParams的对应关系</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#参考"><span class="toc-text">参考</span></a></li></ol>
+  </div>
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-Android-理解MeasureSpec" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Android 理解MeasureSpec</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2016.04.06</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>王白告</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>MeasureSpec的意思是“测量规格”，它在很大程度上决定了一个View的尺寸规格，之所以说是很大程度上是因为这个过程还受父容器的影响，因为父容器影响View的MeasureSpec的创建过程。在测量过程中，系统会将View的LayoutParams根据父容器所施加的规则转化成对应的MeasureSpec，然后再根据这个measureSpec来测量出View的宽/高。这里的宽/高是测量宽/高，不一定等于View的最终宽/高</p>
+<h1 id="1-MeasureSpec"><a href="#1-MeasureSpec" class="headerlink" title="1. MeasureSpec"></a>1. MeasureSpec</h1><p>MeasureSpec代表一个32位int值，高2位代表SpecMode，低30位代表SpecSize，SpecMode指测量模式，而SpecSize是指在某种测量模式下的规格大小</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">MeasureSpec</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MODE_SHIFT = <span class="number">30</span>;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> MODE_MASK  = <span class="number">0x3</span> &lt;&lt; MODE_SHIFT;</div><div class="line"></div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> UNSPECIFIED = <span class="number">0</span> &lt;&lt; MODE_SHIFT;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> EXACTLY     = <span class="number">1</span> &lt;&lt; MODE_SHIFT;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> AT_MOST     = <span class="number">2</span> &lt;&lt; MODE_SHIFT;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">makeMeasureSpec</span><span class="params">(<span class="keyword">int</span> size, <span class="keyword">int</span> mode)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (sUseBrokenMakeMeasureSpec) &#123;</div><div class="line">            <span class="keyword">return</span> size + mode;</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> (size &amp; ~MODE_MASK) | (mode &amp; MODE_MASK);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getMode</span><span class="params">(<span class="keyword">int</span> measureSpec)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> (measureSpec &amp; MODE_MASK);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getSize</span><span class="params">(<span class="keyword">int</span> measureSpec)</span> </span>&#123;</div><div class="line">        <span class="keyword">return</span> (measureSpec &amp; ~MODE_MASK);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">adjust</span><span class="params">(<span class="keyword">int</span> measureSpec, <span class="keyword">int</span> delta)</span> </span>&#123;</div><div class="line">        <span class="keyword">final</span> <span class="keyword">int</span> mode = getMode(measureSpec);</div><div class="line">        <span class="keyword">if</span> (mode == UNSPECIFIED) &#123;</div><div class="line">            <span class="comment">// No need to adjust size for UNSPECIFIED mode.</span></div><div class="line">            <span class="keyword">return</span> makeMeasureSpec(<span class="number">0</span>, UNSPECIFIED);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">int</span> size = getSize(measureSpec) + delta;</div><div class="line">        <span class="keyword">if</span> (size &lt; <span class="number">0</span>) &#123;</div><div class="line">            Log.e(VIEW_LOG_TAG, <span class="string">"MeasureSpec.adjust: new size would be negative! ("</span> + size +</div><div class="line">                    <span class="string">") spec: "</span> + toString(measureSpec) + <span class="string">" delta: "</span> + delta);</div><div class="line">            size = <span class="number">0</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> makeMeasureSpec(size, mode);</div><div class="line">    &#125;</div><div class="line">  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> String <span class="title">toString</span><span class="params">(<span class="keyword">int</span> measureSpec)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> mode = getMode(measureSpec);</div><div class="line">        <span class="keyword">int</span> size = getSize(measureSpec);</div><div class="line"></div><div class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder(<span class="string">"MeasureSpec: "</span>);</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (mode == UNSPECIFIED)</div><div class="line">            sb.append(<span class="string">"UNSPECIFIED "</span>);</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (mode == EXACTLY)</div><div class="line">            sb.append(<span class="string">"EXACTLY "</span>);</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (mode == AT_MOST)</div><div class="line">            sb.append(<span class="string">"AT_MOST "</span>);</div><div class="line">        <span class="keyword">else</span></div><div class="line">            sb.append(mode).append(<span class="string">" "</span>);</div><div class="line"></div><div class="line">        sb.append(size);</div><div class="line">        <span class="keyword">return</span> sb.toString();</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>MeasureSpec通过将SpecMode和SpecSize打包成一个int值来避免过多的对象内存分配，为了方便操作，其提供了打包和解包方法</p>
+<p><strong>SpecMode有三类：</strong></p>
+<ul>
+<li><strong>UNSPECIFIED</strong>，父容器不对View有任何限制，要多大给多大。这种情况一般用于系统内部，表示一种测量的状态</li>
+<li><strong>EXACTLY</strong>，父容器已经检测出View所需要的精确大小。此时View的最终大小就是SpecSize对应的值。它对应于LayoutParams中的match_parent和具体的数值这两种模式</li>
+<li><strong>AT_MOST</strong>，父容器指定了一个可用大小即SpecSize，View的大小不能大于这个值，具体是多少要看不同View的具体实现。它对应于LayoutParams中的wrap_content</li>
+</ul>
+<h1 id="2-MeasureSpec和LayoutParams的对应关系"><a href="#2-MeasureSpec和LayoutParams的对应关系" class="headerlink" title="2. MeasureSpec和LayoutParams的对应关系"></a>2. MeasureSpec和LayoutParams的对应关系</h1><p>系统内部是通过MeasureSpec来进行View的测量，但正常情况下我们使用View指定MeasureSpec。但当我们给View设置LayoutParams，在View测量的时候，系统会将LayoutParams在父容器的约束下转化成对应的MeasureSpec，然后再根据这个MeasureSpec来确定View测量后的宽/高。<strong>需要注意的是，MeasureSpec不是唯一由LayoutParams决定的，LayoutParams需要和父容器一起才能决定View的MeasureSpec，从而进一步决定View的宽/高</strong></p>
+<p>对于顶级View(即DecorView)和普通View来说，MeasureSpec的转换过程略有不同。对于DecorView，其MeasureSpec由窗口尺寸和其自身的LayoutParams来共同确定；对于普通View，其MeasureSpec由父容器的MeasureSpec和自身的LayoutParams来共同决定，MeasureSpec一旦确定后，onMeasure中就可以确定View的测量宽/高</p>
+<p>对于普通View来说(布局中的View)，View的measure过程由ViewGroup传递而来。看下ViewGroup的measureChildWithMargins方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">measureChildWithMargins</span><span class="params">(View child,</span></span></div><div class="line">        <span class="keyword">int</span> parentWidthMeasureSpec, <span class="keyword">int</span> widthUsed,</div><div class="line">        <span class="keyword">int</span> parentHeightMeasureSpec, <span class="keyword">int</span> heightUsed) &#123;</div><div class="line">    <span class="keyword">final</span> MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();</div><div class="line"></div><div class="line">    <span class="keyword">final</span> <span class="keyword">int</span> childWidthMeasureSpec = getChildMeasureSpec(parentWidthMeasureSpec,</div><div class="line">            mPaddingLeft + mPaddingRight + lp.leftMargin + lp.rightMargin</div><div class="line">                    + widthUsed, lp.width);</div><div class="line">    <span class="keyword">final</span> <span class="keyword">int</span> childHeightMeasureSpec = getChildMeasureSpec(parentHeightMeasureSpec,</div><div class="line">            mPaddingTop + mPaddingBottom + lp.topMargin + lp.bottomMargin</div><div class="line">                    + heightUsed, lp.height);</div><div class="line"></div><div class="line">    child.measure(childWidthMeasureSpec, childHeightMeasureSpec);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上述方法会对子元素进行measure，在调用子元素的measure方法之前会先通过getChildMeasureSpec方法来得到子元素的MeasureSpec。从代码可以看出子元素的MeasureSpec的创建与父容器的MeasureSpec和子元素本身的LayoutParams有关，此外还和View的margin及padding有关</p>
+<p>再看下ViewGroup的getChildMeasureSpec方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">getChildMeasureSpec</span><span class="params">(<span class="keyword">int</span> spec, <span class="keyword">int</span> padding, <span class="keyword">int</span> childDimension)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> specMode = MeasureSpec.getMode(spec);</div><div class="line">    <span class="keyword">int</span> specSize = MeasureSpec.getSize(spec);</div><div class="line"></div><div class="line">    <span class="keyword">int</span> size = Math.max(<span class="number">0</span>, specSize - padding);</div><div class="line"></div><div class="line">    <span class="keyword">int</span> resultSize = <span class="number">0</span>;</div><div class="line">    <span class="keyword">int</span> resultMode = <span class="number">0</span>;</div><div class="line"></div><div class="line">    <span class="keyword">switch</span> (specMode) &#123;</div><div class="line">    <span class="comment">// Parent has imposed an exact size on us</span></div><div class="line">    <span class="keyword">case</span> MeasureSpec.EXACTLY:</div><div class="line">        <span class="keyword">if</span> (childDimension &gt;= <span class="number">0</span>) &#123;</div><div class="line">            resultSize = childDimension;</div><div class="line">            resultMode = MeasureSpec.EXACTLY;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (childDimension == LayoutParams.MATCH_PARENT) &#123;</div><div class="line">            <span class="comment">// Child wants to be our size. So be it.</span></div><div class="line">            resultSize = size;</div><div class="line">            resultMode = MeasureSpec.EXACTLY;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (childDimension == LayoutParams.WRAP_CONTENT) &#123;</div><div class="line">            <span class="comment">// Child wants to determine its own size. It can't be</span></div><div class="line">            <span class="comment">// bigger than us.</span></div><div class="line">            resultSize = size;</div><div class="line">            resultMode = MeasureSpec.AT_MOST;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line"></div><div class="line">    <span class="comment">// Parent has imposed a maximum size on us</span></div><div class="line">    <span class="keyword">case</span> MeasureSpec.AT_MOST:</div><div class="line">        <span class="keyword">if</span> (childDimension &gt;= <span class="number">0</span>) &#123;</div><div class="line">            <span class="comment">// Child wants a specific size... so be it</span></div><div class="line">            resultSize = childDimension;</div><div class="line">            resultMode = MeasureSpec.EXACTLY;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (childDimension == LayoutParams.MATCH_PARENT) &#123;</div><div class="line">            <span class="comment">// Child wants to be our size, but our size is not fixed.</span></div><div class="line">            <span class="comment">// Constrain child to not be bigger than us.</span></div><div class="line">            resultSize = size;</div><div class="line">            resultMode = MeasureSpec.AT_MOST;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (childDimension == LayoutParams.WRAP_CONTENT) &#123;</div><div class="line">            <span class="comment">// Child wants to determine its own size. It can't be</span></div><div class="line">            <span class="comment">// bigger than us.</span></div><div class="line">            resultSize = size;</div><div class="line">            resultMode = MeasureSpec.AT_MOST;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line"></div><div class="line">    <span class="comment">// Parent asked to see how big we want to be</span></div><div class="line">    <span class="keyword">case</span> MeasureSpec.UNSPECIFIED:</div><div class="line">        <span class="keyword">if</span> (childDimension &gt;= <span class="number">0</span>) &#123;</div><div class="line">            <span class="comment">// Child wants a specific size... let him have it</span></div><div class="line">            resultSize = childDimension;</div><div class="line">            resultMode = MeasureSpec.EXACTLY;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (childDimension == LayoutParams.MATCH_PARENT) &#123;</div><div class="line">            <span class="comment">// Child wants to be our size... find out how big it should</span></div><div class="line">            <span class="comment">// be</span></div><div class="line">            resultSize = <span class="number">0</span>;</div><div class="line">            resultMode = MeasureSpec.UNSPECIFIED;</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span> (childDimension == LayoutParams.WRAP_CONTENT) &#123;</div><div class="line">            <span class="comment">// Child wants to determine its own size.... find out how</span></div><div class="line">            <span class="comment">// big it should be</span></div><div class="line">            resultSize = <span class="number">0</span>;</div><div class="line">            resultMode = MeasureSpec.UNSPECIFIED;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">break</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> MeasureSpec.makeMeasureSpec(resultSize, resultMode);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上述方法它的主要作用是根据父容器的MeasureSpec同时结合View本身的LayoutParams来确定子元素的MeasureSpec，参数中的padding是指父容器中已占用的空间大小，因此子元素可用的大小为父容器的尺寸减去padding</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> specSize = MeasureSpec.getSize(spec);</div><div class="line"><span class="keyword">int</span> size = Math.max(<span class="number">0</span>, specSize - padding);</div></pre></td></tr></table></figure>
+<p>getChildMeasureSpec方法清楚展示了普通View的MeasureSpec的创建规则</p>
+<p><img src="/2016/04/06/Android-理解MeasureSpec/./1.png" alt=""></p>
+<p>根据上表可知，对于普通View其MeasureSpec由父容器的MeasureSpec和自身的LayoutParams来共同决定</p>
+<ul>
+<li>当View采用固定宽/高时，不管父容器的MeasureSpec是什么，View的MeasureSpec都是精确模式且其大小遵循LayoutP中的大小</li>
+<li>当View的宽/高是match_parent时，如果父容器的模式是精准模式，那么View也是精准模式且其大小是父容器的剩余空间；如果父容器是最大模式，那么View也是最大模式且其大小不会超过父容器的剩余空间</li>
+<li>当View的宽/高时wrap_content时，不管父容器的模式是精准还是最大化，View的模式总是最大化且大小不能超过父容器的剩余空间</li>
+</ul>
+<p>只要提供了父容器的MeasureSpec和子元素的LayoutParams，就可以快速地确定出子元素的MeasureSpec了，有了MeasureSpec就可以进一步确定出子元素测量后的大小了</p>
+<h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><ul>
+<li>《Android开发艺术探索》</li>
+</ul>
+
+    
+  </div>
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2016/04/04/Android-View的事件分发机制-二/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="show pull-right" href="/2016/07/15/Java中的线程池和Executor框架/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
