@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+
+
+  <html class="light page-post">
+
+
+<head>
+  <meta charset="utf-8">
+  
+  <title>Android OpenSL ES播放PCM数据 | 王白告的Blog</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+    <meta name="keywords" content="移动开发,开源,架构,全栈,Android" />
+  
+
+  <meta name="description" content="今天我们来记录下在Android平台下使用OpenSL ES来播放音频数据。还不了解OpenSL ES可以学习下Android音频开发（6）：使用 OpenSL ES API(上)和Android音频开发（7）：使用 OpenSL ES API(下)这两篇blog。简单来说OpenSL ES(Open Sound Library for Embedded Systems)是一套针对嵌入式平台的音频">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android OpenSL ES播放PCM数据">
+<meta property="og:url" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/index.html">
+<meta property="og:site_name" content="王白告的Blog">
+<meta property="og:description" content="今天我们来记录下在Android平台下使用OpenSL ES来播放音频数据。还不了解OpenSL ES可以学习下Android音频开发（6）：使用 OpenSL ES API(上)和Android音频开发（7）：使用 OpenSL ES API(下)这两篇blog。简单来说OpenSL ES(Open Sound Library for Embedded Systems)是一套针对嵌入式平台的音频">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./1.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./2.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./3.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./4.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./5.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./6.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./7.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./8.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./9.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./10.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./11.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./12.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./13.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./14.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./15.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./16.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./17.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./20.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./18.png">
+<meta property="og:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./19.png">
+<meta property="og:updated_time" content="2017-08-30T14:23:31.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android OpenSL ES播放PCM数据">
+<meta name="twitter:description" content="今天我们来记录下在Android平台下使用OpenSL ES来播放音频数据。还不了解OpenSL ES可以学习下Android音频开发（6）：使用 OpenSL ES API(上)和Android音频开发（7）：使用 OpenSL ES API(下)这两篇blog。简单来说OpenSL ES(Open Sound Library for Embedded Systems)是一套针对嵌入式平台的音频">
+<meta name="twitter:image" content="http://yoursite.com/2017/08/26/Android-OpenSL-ES播放wav文件/./1.png">
+
+  
+
+  
+    <link rel="icon" href="/favicon.ico">
+  
+
+  <link href="/css/styles.css?v=c114cbe6" rel="stylesheet">
+
+
+  
+    <link rel="stylesheet" href="/css/personal-style.css">
+  
+
+  
+
+  
+
+  
+
+
+  
+
+  
+</head>
+
+<body>
+
+
+  
+
+  <div class="post-header">
+   
+
+</div>
+
+
+
+
+<div class="content content-post CENTER">
+   <article id="post-Android-OpenSL-ES播放wav文件" class="article article-type-post" itemprop="blogPost">
+  <header class="article-header">
+    <h1 class="post-title">Android OpenSL ES播放PCM数据</h1>
+
+    <div class="article-meta">
+      <span>
+        <i class="icon-calendar"></i>
+        <span>2017.08.26</span>
+      </span>
+
+      
+        <span class="article-author">
+          <i class="icon-user"></i>
+          <span>王白告</span>
+        </span>
+      
+
+      
+
+
+      
+
+      
+
+      
+      
+    </div>
+  </header>
+
+  <div class="article-content">
+    
+      <p>今天我们来记录下在Android平台下使用OpenSL ES来播放音频数据。还不了解OpenSL ES可以学习下<a href="http://ticktick.blog.51cto.com/823160/1764778" target="_blank" rel="external">Android音频开发（6）：使用 OpenSL ES API(上)</a>和<a href="http://ticktick.blog.51cto.com/823160/1771239" target="_blank" rel="external">Android音频开发（7）：使用 OpenSL ES API(下)</a>这两篇blog。简单来说OpenSL ES(Open Sound Library for Embedded Systems)是一套针对嵌入式平台的音频标准</p>
+<p>Android在2.3后开始支持OpenSL ES，通过NDK提供的相应的API开发接口。NDK中也有相关demo</p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./1.png" alt=""></p>
+<p>在<a href="https://eterualrb.github.io/2017/08/21/FFMPEG-%E4%BD%BF%E7%94%A8AudioTrack%E6%92%AD%E6%94%BEPCM%E6%95%B0%E6%8D%AE/" target="_blank" rel="external">FFMPEG 使用AudioTrack播放PCM数据</a>一文中我们使用Android的AudioTrack进行音频播放时需要频繁地在native层和java层拷贝音频数据，而使用OpenSL ES可以避免这种情况，提高效率</p>
+<p>使用OpenSL ES进行开发时流程相对固定，下面给出一张从网上找到的图来描述下具体的流程</p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./2.png" alt=""></p>
+<p>我们仅需要按照图上的流程去开发就可以播放音频数据了</p>
+<p>今天我们要去播放wav文件，而解码不用FFMPEG而是使用一个开源库<strong>transcode下的avilib</strong>，和前面使用<strong>libyuv</strong>库一样，我们把它打成一个共享库so供测试程序使用。具体执行流程这里就不再详述了。我们今天只关注下OpenSL ES的使用，结合上图中的流程来看下代码吧</p>
+<p>1）打开文件</p>
+<p>我们使用<strong>avilib</strong>去打开wav文件</p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./3.png" alt=""></p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./4.png" alt=""></p>
+<p>2）创建OpenSL ES引擎并实例化</p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./5.png" alt=""></p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./6.png" alt=""></p>
+<p>3）获取引擎接口</p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./7.png" alt=""></p>
+<p>4）创建输出混音器并实例化</p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./8.png" alt=""></p>
+<p>5）创建保存音频数据的数据缓冲区</p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./9.png" alt=""></p>
+<p>6）创建带有缓冲区队列的音频播放器并实例化</p>
+<p>首先我们要了解下OpenSL ES里面的<strong>Data Source和Data Sink</strong>，这两个结构体均是作为创建 Media Object 对象时的参数而存在的，data source 代表着输入源的信息，即数据从哪儿来、输入的数据参数是怎样的；而 data sink 则代表着输出的信息，即数据输出到哪儿、以什么样的参数来输出</p>
+<p>DataSource和Data Sink的结构定义如下</p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./10.png" alt=""></p>
+<p>不同的 Media Object 对象实例，data source 和 data sink 的具体内容是不一样的</p>
+<p><strong>对于 player 而言</strong></p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./11.png" alt=""></p>
+<p><strong>对于 recorder 而言</strong></p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./12.png" alt=""></p>
+<p>了解了Data Source和Data Sink后，我们就去创建音频播放器吧</p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./13.png" alt=""></p>
+<p>其实这里主要就是配置Data Source和Data Sink创建音频播放器</p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./14.png" alt=""></p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./15.png" alt=""></p>
+<p>7）获得缓冲区队列接口</p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./16.png" alt=""></p>
+<p>8）注册音频播放器回调函数</p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./17.png" alt=""></p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./20.png" alt=""></p>
+<p>9）SetPlayState启动播放音乐</p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./18.png" alt=""></p>
+<p>10）让第一个缓冲区入队进行播放，然后回调函数会一直调用，直到音频数据读取完毕</p>
+<p><img src="/2017/08/26/Android-OpenSL-ES播放wav文件/./19.png" alt=""></p>
+<p>到此，我们利用OpenSL ES进行PCM数据的播放就完成了</p>
+<p><strong>参考</strong></p>
+<p><a href="http://ticktick.blog.51cto.com/823160/1764778" target="_blank" rel="external">Android音频开发（6）：使用 OpenSL ES API(上)</a></p>
+<p><a href="http://ticktick.blog.51cto.com/823160/1771239" target="_blank" rel="external">Android音频开发（7）：使用 OpenSL ES API(下)</a></p>
+<p><a href="http://blog.csdn.net/vista1995/article/details/54835727" target="_blank" rel="external">http://blog.csdn.net/vista1995/article/details/54835727</a></p>
+
+    
+  </div>
+</article>
+
+
+   
+
+   
+  <div class="box-prev-next clearfix">
+    <a class="show pull-left" href="/2017/08/21/FFMPEG-使用AudioTrack播放PCM数据/">
+        <i class="icon icon-angle-left"></i>
+    </a>
+    <a class="hide pull-right" href="/">
+        <i class="icon icon-angle-right"></i>
+    </a>
+  </div>
+
+
+
+
+</div>
+
+
+  <a id="backTop" class="back-top">
+    <i class="icon-angle-up"></i>
+  </a>
+
+
+
+
+  <div class="modal" id="modal">
+  <span id="cover" class="cover hide"></span>
+  <div id="modal-dialog" class="modal-dialog hide-dialog">
+    <div class="modal-header">
+      <span id="close" class="btn-close">关闭</span>
+    </div>
+    <hr>
+    <div class="modal-body">
+      <ul class="list-toolbox">
+        
+          <li class="item-toolbox">
+            <a
+              class="CIRCLE"
+              href="/archives/"
+              rel="noopener noreferrer"
+              target="_self"
+              >
+              博客
+            </a>
+          </li>
+        
+      </ul>
+
+    </div>
+  </div>
+</div>
+
+
+
+  
+      <div class="fexo-comments comments-post">
+    
+
+    
+
+
+
+
+    
+
+  </div>
+
+  
+
+  <script type="text/javascript">
+  function loadScript(url, callback) {
+    var script = document.createElement('script')
+    script.type = 'text/javascript';
+
+    if (script.readyState) { //IE
+      script.onreadystatechange = function() {
+        if (script.readyState == 'loaded' ||
+          script.readyState == 'complete') {
+          script.onreadystatechange = null;
+          callback();
+        }
+      };
+    } else { //Others
+      script.onload = function() {
+        callback();
+      };
+    }
+
+    script.src = url;
+    document.getElementsByTagName('head')[0].appendChild(script);
+  }
+
+  window.onload = function() {
+    loadScript('/js/bundle.js?235683', function() {
+      // load success
+    });
+  }
+</script>
+
+</body>
+</html>
