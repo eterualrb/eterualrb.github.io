@@ -43,7 +43,7 @@
 <meta property="og:image" content="http://yoursite.com/2017/06/13/直播总结一-FLV文件分析/./19.png">
 <meta property="og:image" content="http://yoursite.com/2017/06/13/直播总结一-FLV文件分析/./18.png">
 <meta property="og:image" content="http://yoursite.com/2017/06/13/直播总结一-FLV文件分析/./20.png">
-<meta property="og:updated_time" content="2017-10-30T06:26:19.000Z">
+<meta property="og:updated_time" content="2017-10-30T06:41:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="直播总结一 FLV文件分析">
 <meta name="twitter:description" content="一、概述FLV(Flash Video)是Adobe公司设计开发的一种流行的流媒体格式，由于其视频文件体积轻巧、封装简单等特点，使其很适合在互联网上进行应用。此外，FLV可以使用Flash Player进行播放，而Flash Player插件已经安装在全世界绝大部分浏览器上，这使得通过网页播放FLV视频十分容易。目前主流的视频网站无一例外地使用了FLV格式
@@ -184,7 +184,7 @@
 <p>第二个AMF包：</p>
 <p>第1个字节表示AMF包类型，一般总是0x08，表示数组。第2-5个字节为UI32类型值，表示数组元素的个数。后面即为各数组元素的封装，数组元素为元素名称和值组成的对。常见的数组元素在FLV的官方规范文档中也有描述</p>
 <p><img src="/2017/06/13/直播总结一-FLV文件分析/./06.png" alt=""></p>
-<p>这部分的具体细节可以参考另一篇blog<a href="https://eterualrb.github.io/2017/10/14/直播总结二-AMF编码/" target="_blank" rel="external">直播总结二 AMF编码</a>进行学习</p>
+<p>这部分的具体细节可以参考另一篇blog<a href="https://eterualrb.github.io/2017/06/16/直播总结二-AMF编码/" target="_blank" rel="external">直播总结二 AMF编码</a>进行学习</p>
 <h3 id="2-2-Audio-Tag-音频Tag"><a href="#2-2-Audio-Tag-音频Tag" class="headerlink" title="2.2 Audio Tag(音频Tag)"></a>2.2 Audio Tag(音频Tag)</h3><p>我们来看下官方规范文档中是怎样描述它的信息的</p>
 <p><img src="/2017/06/13/直播总结一-FLV文件分析/./07.png" alt=""></p>
 <p>总结如下表所示</p>
