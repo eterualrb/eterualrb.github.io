@@ -26,7 +26,7 @@
 RTP数据包格">
 <meta property="og:type" content="article">
 <meta property="og:title" content="直播总结四 NALU">
-<meta property="og:url" content="http://yoursite.com/2017/07/25/直播总结四-NALU/index.html">
+<meta property="og:url" content="http://yoursite.com/2017/06/25/直播总结四-NALU/index.html">
 <meta property="og:site_name" content="王白告的Blog">
 <meta property="og:description" content="在直播总结三 H264中其实已经分析过NALU的相关内容了，这次又单独进行分析是为了更加深刻的了解NALU的结构，毕竟理解了 NALU，就理解了H.264 的结构了
 一、H.264的码流封装格式Annex-B字节流格式(我们主要分析的对象)
@@ -37,13 +37,13 @@ RTP数据包格">
 起始码：0x 00 00 00 01 或 0x 00 00 01
 
 RTP数据包格">
-<meta property="og:image" content="http://yoursite.com/2017/07/25/直播总结四-NALU/./01.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/25/直播总结四-NALU/./02.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/25/直播总结四-NALU/./03.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/25/直播总结四-NALU/./04.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/25/直播总结四-NALU/./05.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/25/直播总结四-NALU/./06.png">
-<meta property="og:updated_time" content="2017-10-30T06:23:01.000Z">
+<meta property="og:image" content="http://yoursite.com/2017/06/25/直播总结四-NALU/./01.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/25/直播总结四-NALU/./02.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/25/直播总结四-NALU/./03.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/25/直播总结四-NALU/./04.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/25/直播总结四-NALU/./05.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/25/直播总结四-NALU/./06.png">
+<meta property="og:updated_time" content="2017-10-30T06:26:02.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="直播总结四 NALU">
 <meta name="twitter:description" content="在直播总结三 H264中其实已经分析过NALU的相关内容了，这次又单独进行分析是为了更加深刻的了解NALU的结构，毕竟理解了 NALU，就理解了H.264 的结构了
@@ -55,7 +55,7 @@ RTP数据包格">
 起始码：0x 00 00 00 01 或 0x 00 00 01
 
 RTP数据包格">
-<meta name="twitter:image" content="http://yoursite.com/2017/07/25/直播总结四-NALU/./01.png">
+<meta name="twitter:image" content="http://yoursite.com/2017/06/25/直播总结四-NALU/./01.png">
 
   
 
@@ -108,7 +108,7 @@ RTP数据包格">
     <div class="article-meta">
       <span>
         <i class="icon-calendar"></i>
-        <span>2017.07.25</span>
+        <span>2017.06.25</span>
       </span>
 
       
@@ -147,9 +147,9 @@ RTP数据包格">
 <li>每个NAL Unit之前以几个字节表示NAL Unit的长度</li>
 </ul>
 <h1 id="二、NAL-Unit字节流格式"><a href="#二、NAL-Unit字节流格式" class="headerlink" title="二、NAL Unit字节流格式"></a>二、NAL Unit字节流格式</h1><p>这部分的内容在官方规范文档中有详细介绍</p>
-<p><img src="/2017/07/25/直播总结四-NALU/./01.png" alt=""></p>
+<p><img src="/2017/06/25/直播总结四-NALU/./01.png" alt=""></p>
 <p>这里再简单的做下总结</p>
-<p><img src="/2017/07/25/直播总结四-NALU/./02.png" alt=""></p>
+<p><img src="/2017/06/25/直播总结四-NALU/./02.png" alt=""></p>
 <ul>
 <li>f(n) : n位定长编码</li>
 <li>leading_zero_8bits : 前缀0，值为0x00，仅在第一个NAL Unit中出现</li>
@@ -160,7 +160,7 @@ RTP数据包格">
 <font color="#ff0000">Annex-B字节流格式中的NAL Unit提取就是提取start_code_prefix之间的数据，但需要注意的是start_code_prefix的值为0x 00 00 01或者0x 00 00 00 01</font>
 
 <h1 id="三、NAL-Unit格式"><a href="#三、NAL-Unit格式" class="headerlink" title="三、NAL Unit格式"></a>三、NAL Unit格式</h1><p>一个NALU由NAL Header和NAL Body构成，官方规范定义的结构如下图所示</p>
-<p><img src="/2017/07/25/直播总结四-NALU/./03.png" alt=""></p>
+<p><img src="/2017/06/25/直播总结四-NALU/./03.png" alt=""></p>
 <h2 id="1-NAL-Header"><a href="#1-NAL-Header" class="headerlink" title="1. NAL Header"></a>1. NAL Header</h2><p>NAL Header由一个字节构成，包括</p>
 <ul>
 <li>forbidden_zero_bit : 0禁止位，1bit</li>
@@ -168,7 +168,7 @@ RTP数据包格">
 <li>nal_unit_type : NAL Unit类型，5bit</li>
 </ul>
 <p>nal_unit_type的参考值如下所示</p>
-<p><img src="/2017/07/25/直播总结四-NALU/./04.png" alt=""></p>
+<p><img src="/2017/06/25/直播总结四-NALU/./04.png" alt=""></p>
 <h2 id="2-NAL-Body"><a href="#2-NAL-Body" class="headerlink" title="2. NAL Body"></a>2. NAL Body</h2><p>NAL Body包含了有效负载数据的封装，自外向内的封装共3层</p>
 <ul>
 <li>第一层：EBSP——扩展字节序列载荷</li>
@@ -188,9 +188,9 @@ RTP数据包格">
 <h3 id="2-3-SODB-String-Of-Data-Bits"><a href="#2-3-SODB-String-Of-Data-Bits" class="headerlink" title="2.3 SODB(String Of Data Bits)"></a>2.3 SODB(String Of Data Bits)</h3><p>表示H.264的语法元素编码完成后的实际的原始二进制码流。SODB通常不能保证字节对齐</p>
 <h1 id="四、H-264码流解析-提取NAL-Unit"><a href="#四、H-264码流解析-提取NAL-Unit" class="headerlink" title="四、H.264码流解析 提取NAL Unit"></a>四、H.264码流解析 提取NAL Unit</h1><p>本C程序其实是完全按照<a href="http://blog.csdn.net/leixiaohua1020" target="_blank" rel="external">雷霄骅</a>的<a href="http://blog.csdn.net/leixiaohua1020/article/details/50534369" target="_blank" rel="external">视音频数据处理入门：H.264视频码流解析</a>写的，只不过在重写时加了一些<a href="https://github.com/eterualrb/Simple_H264_Analyzer" target="_blank" rel="external">代码</a>注释，让自己对NAL Unit的提取理解更加深刻一些，也算是自己学习H.264编码格式做的一个笔记吧</p>
 <p>首先我们定义了两个枚举类型<strong>NaluType</strong>和<strong>NaluPriority</strong>，分别对应NAL Header中的<strong>nal_ref_idc</strong>和<strong>nal_unit_type</strong></p>
-<p><img src="/2017/07/25/直播总结四-NALU/./05.png" alt=""></p>
+<p><img src="/2017/06/25/直播总结四-NALU/./05.png" alt=""></p>
 <p>还定义了一个结构体<strong>NALU_t</strong>，用来表示NAL Unit的数据结构</p>
-<p><img src="/2017/07/25/直播总结四-NALU/./06.png" alt=""></p>
+<p><img src="/2017/06/25/直播总结四-NALU/./06.png" alt=""></p>
 <ul>
 <li>startcodeprefix_len :  码流中标识NAL Unit起始的prefix code的长度，为3(0x 00 00 01)或者4(0x 00 00 00 01)</li>
 <li>len :  NAL Unit的长度，不包括prefix code，也就是NAL HEADER + NAL BODY的长度</li>
@@ -213,10 +213,10 @@ RTP数据包格">
 
    
   <div class="box-prev-next clearfix">
-    <a class="show pull-left" href="/2017/07/21/直播总结三-H264/">
+    <a class="show pull-left" href="/2017/06/21/直播总结三-H264/">
         <i class="icon icon-angle-left"></i>
     </a>
-    <a class="show pull-right" href="/2017/07/30/直播总结五-RTMP协议/">
+    <a class="show pull-right" href="/2017/06/30/直播总结五-RTMP协议/">
         <i class="icon icon-angle-right"></i>
     </a>
   </div>

@@ -21,29 +21,29 @@
 时间冗余：视频相邻的两帧之间内容相似，存在运动关">
 <meta property="og:type" content="article">
 <meta property="og:title" content="直播总结三 H264 ">
-<meta property="og:url" content="http://yoursite.com/2017/07/21/直播总结三-H264/index.html">
+<meta property="og:url" content="http://yoursite.com/2017/06/21/直播总结三-H264/index.html">
 <meta property="og:site_name" content="王白告的Blog">
 <meta property="og:description" content="一、概述在当今社会，视频已经成为记录和重现信息最为高效的方式，可以在相对很短的时间内传递大量的信息。但对于视频数据而言，因为动态图像的像素形式表示数据量极为巨大，存储空间和传输带宽完全无法满足保存和传输的需求，所以我们需要对其进行编码，目的就是进行数据压缩
 视频信息之所以存在大量可以被压缩的空间，是因为其中本身就存在大量的数据冗余。其主要类型有：
 
 时间冗余：视频相邻的两帧之间内容相似，存在运动关">
-<meta property="og:image" content="http://yoursite.com/2017/07/21/直播总结三-H264/./01.jpg">
-<meta property="og:image" content="http://yoursite.com/2017/07/21/直播总结三-H264/./03.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/21/直播总结三-H264/./02.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/21/直播总结三-H264/./04.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/21/直播总结三-H264/./05.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/21/直播总结三-H264/./06.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/21/直播总结三-H264/./07.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/21/直播总结三-H264/./08.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/21/直播总结三-H264/./09.jpeg">
-<meta property="og:updated_time" content="2017-10-30T06:22:42.000Z">
+<meta property="og:image" content="http://yoursite.com/2017/06/21/直播总结三-H264/./01.jpg">
+<meta property="og:image" content="http://yoursite.com/2017/06/21/直播总结三-H264/./03.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/21/直播总结三-H264/./02.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/21/直播总结三-H264/./04.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/21/直播总结三-H264/./05.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/21/直播总结三-H264/./06.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/21/直播总结三-H264/./07.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/21/直播总结三-H264/./08.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/21/直播总结三-H264/./09.jpeg">
+<meta property="og:updated_time" content="2017-10-30T06:25:38.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="直播总结三 H264 ">
 <meta name="twitter:description" content="一、概述在当今社会，视频已经成为记录和重现信息最为高效的方式，可以在相对很短的时间内传递大量的信息。但对于视频数据而言，因为动态图像的像素形式表示数据量极为巨大，存储空间和传输带宽完全无法满足保存和传输的需求，所以我们需要对其进行编码，目的就是进行数据压缩
 视频信息之所以存在大量可以被压缩的空间，是因为其中本身就存在大量的数据冗余。其主要类型有：
 
 时间冗余：视频相邻的两帧之间内容相似，存在运动关">
-<meta name="twitter:image" content="http://yoursite.com/2017/07/21/直播总结三-H264/./01.jpg">
+<meta name="twitter:image" content="http://yoursite.com/2017/06/21/直播总结三-H264/./01.jpg">
 
   
 
@@ -96,7 +96,7 @@
     <div class="article-meta">
       <span>
         <i class="icon-calendar"></i>
-        <span>2017.07.21</span>
+        <span>2017.06.21</span>
       </span>
 
       
@@ -132,7 +132,7 @@
 <h1 id="二、H-264编码框架"><a href="#二、H-264编码框架" class="headerlink" title="二、H.264编码框架"></a>二、H.264编码框架</h1><ol>
 <li>整体的编码框架方面，<font color="#ff0000">H.264依然采用块结构的混合编码框架</font>。其主要结构如下图所示</li>
 </ol>
-<p><img src="/2017/07/21/直播总结三-H264/./01.jpg" alt=""></p>
+<p><img src="/2017/06/21/直播总结三-H264/./01.jpg" alt=""></p>
 <ol>
 <li>整个码流结构可以分为<font color="#ff0000">视频编码层(VCL)和网络抽象层(NAL)</font></li>
 </ol>
@@ -175,12 +175,12 @@
 <li>RTP包格式：包格式方法将NAL Unit按照RTP数据包的格式封装。使用RTP包格式不需要额外的分割识别码，在RTP包的封装信息中有相应的数据长度信息。此种封装格式在标准协议文档中没有明确规定，但在JM Decoder中做了一定处理。通常可以在NAL Unit的起始位置用一个固定长度的长度码表示整个NAL Unit的长度</li>
 </ul>
 <p>我们主要按照<strong>字节流格式</strong>进行分析，看下官方规范中字节流格式的结构吧</p>
-<p><img src="/2017/07/21/直播总结三-H264/./03.png" alt=""></p>
+<p><img src="/2017/06/21/直播总结三-H264/./03.png" alt=""></p>
 <h2 id="1-H-264编码格式"><a href="#1-H-264编码格式" class="headerlink" title="1. H.264编码格式"></a>1. H.264编码格式</h2><p>在 VCL 数据传输或存储之前，这些编码的 VCL 数据，先被映射或封装进NAL 单元中。每个 NAL 单元包括一个原始字节序列负荷(RBSP, Raw Byte Sequence<br>Payload)和一组对应于视频编码的 NAL 头信息。RBSP 的基本结构是：在原始编码数据的后面填加了结尾比特。一个 bit“1”若干比特“0”，以便字节对齐</p>
-<p><img src="/2017/07/21/直播总结三-H264/./02.png" alt=""></p>
+<p><img src="/2017/06/21/直播总结三-H264/./02.png" alt=""></p>
 <p>上图中的 NAL头 + RBSP 就相当与一个 NALU (Nal Unit), 每个单元都按独立的 NALU 传送。 其实说白了，H.264 中的结构全部都是以 NALU 为主的，理解了 NALU，就理解 H.264 的结构了</p>
 <h2 id="2-NAL-Header"><a href="#2-NAL-Header" class="headerlink" title="2. NAL Header"></a>2. NAL Header</h2><p>NAL头由一个字节组成</p>
-<p><img src="/2017/07/21/直播总结三-H264/./04.png" alt=""></p>
+<p><img src="/2017/06/21/直播总结三-H264/./04.png" alt=""></p>
 <p>NAL头信息的每一位说明如下表所示</p>
 <table>
 <thead>
@@ -219,9 +219,9 @@
 </tbody>
 </table>
 <p>NALU类型的取值如下所示</p>
-<p><img src="/2017/07/21/直播总结三-H264/./05.png" alt=""></p>
+<p><img src="/2017/06/21/直播总结三-H264/./05.png" alt=""></p>
 <h2 id="3-H-264的传输"><a href="#3-H-264的传输" class="headerlink" title="3. H.264的传输"></a>3. H.264的传输</h2><p>H.264 的编码视频序列包括一系列的NAL单元，每个NAL单元包含一个 RBSP。典型的 RBSP 单元序列如下图所示。每个单元都按独立的 NAL 单元传送。单元的信息头（一个字节）定义了 RBSP 单元的类型，NAL 单元的其余部分为 RBSP 数据</p>
-<p><img src="/2017/07/21/直播总结三-H264/./06.png" alt=""></p>
+<p><img src="/2017/06/21/直播总结三-H264/./06.png" alt=""></p>
 <p>RBSP各部分的解释如下表所示</p>
 <table>
 <thead>
@@ -265,7 +265,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="4-H-264码流结构"><a href="#4-H-264码流结构" class="headerlink" title="4. H.264码流结构"></a>4. H.264码流结构</h2><p><img src="/2017/07/21/直播总结三-H264/./07.png" alt=""></p>
+<h2 id="4-H-264码流结构"><a href="#4-H-264码流结构" class="headerlink" title="4. H.264码流结构"></a>4. H.264码流结构</h2><p><img src="/2017/06/21/直播总结三-H264/./07.png" alt=""></p>
 <p>上图为H.264码流分层结构，解释如下</p>
 <p>第一层：比特流。该层有两种格式：附录B格式和RTP格式</p>
 <p>第二层：NAL Unit层。包含了NAL Header和NAL Body信息</p>
@@ -274,13 +274,13 @@
 <li>片的目的：为了限制误码的扩散和传输，使编码片相互间保持独立。片共有 5 种类型： I 片（只包含 I 宏块）、P 片（P 和 I 宏块）、B 片（B 和 I 宏块）、SP 片（用于不同编码流之间的切换）和 SI 片（特殊类型的编码宏块）。</li>
 <li>片的语法结构如下图所示。片头规定了片的类型、属于哪个图像、有关的参考图像等；片的数据包含了一系列宏块和不编码数据</li>
 </ul>
-<p><img src="/2017/07/21/直播总结三-H264/./08.png" alt=""></p>
+<p><img src="/2017/06/21/直播总结三-H264/./08.png" alt=""></p>
 <p>第四层：Slice data层。Slice由宏块（macro block, MB）组成。宏块是编码处理的基本单元</p>
 <p>第五层：PCM类</p>
 <p>第六层：残差层</p>
 <h2 id="5-H-264的Level（级别）和Profile（档次）"><a href="#5-H-264的Level（级别）和Profile（档次）" class="headerlink" title="5.  H.264的Level（级别）和Profile（档次）"></a>5.  H.264的Level（级别）和Profile（档次）</h2><font color="#ff0000">H264的Level（级别）是用来约束分辨率、帧率和码率的，具体请参照下表</font>
 
-<p><img src="/2017/07/21/直播总结三-H264/./09.jpeg" alt=""></p>
+<p><img src="/2017/06/21/直播总结三-H264/./09.jpeg" alt=""></p>
 <ul>
 <li><p>Maxmacroblocks：最大宏块数(注：宏块尺寸是16x16的)</p>
 <p>  per second：每秒（的最大宏块数）。可用于约束帧率</p>
@@ -320,10 +320,10 @@
 
    
   <div class="box-prev-next clearfix">
-    <a class="show pull-left" href="/2017/07/16/直播总结二-AMF编码/">
+    <a class="show pull-left" href="/2017/06/16/直播总结二-AMF编码/">
         <i class="icon icon-angle-left"></i>
     </a>
-    <a class="show pull-right" href="/2017/07/25/直播总结四-NALU/">
+    <a class="show pull-right" href="/2017/06/25/直播总结四-NALU/">
         <i class="icon icon-angle-right"></i>
     </a>
   </div>

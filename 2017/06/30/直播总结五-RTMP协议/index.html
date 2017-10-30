@@ -19,48 +19,48 @@
 RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出的一种应用层的协议，用来解决多媒体数据传输流多路复用(Multiplexing)和分包(packetizing)的问题，它依赖底层可靠的传输层协议(通常是TCP)来保证信息传输的可靠性">
 <meta property="og:type" content="article">
 <meta property="og:title" content="直播总结五 RTMP协议">
-<meta property="og:url" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/index.html">
+<meta property="og:url" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/index.html">
 <meta property="og:site_name" content="王白告的Blog">
 <meta property="og:description" content="最近在做直播相关内容时，使用到了Rtmp协议，在此记录一下Rtmp协议部分需要注意的地方，方便后续的查阅和复习
 RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出的一种应用层的协议，用来解决多媒体数据传输流多路复用(Multiplexing)和分包(packetizing)的问题，它依赖底层可靠的传输层协议(通常是TCP)来保证信息传输的可靠性">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./02.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./03.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./04.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./01.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./05.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./06.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./07.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./24.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./19.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./20.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./21.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./22.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./23.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./08.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./09.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./10.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./11.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./12.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./13.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./14.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./15.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./16.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./17.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./18.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./26.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./25.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./27.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./28.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./29.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./30.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./31.png">
-<meta property="og:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./32.png">
-<meta property="og:updated_time" content="2017-10-30T06:23:17.000Z">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./02.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./03.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./04.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./01.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./05.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./06.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./07.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./24.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./19.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./20.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./21.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./22.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./23.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./08.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./09.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./10.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./11.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./12.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./13.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./14.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./15.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./16.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./17.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./18.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./26.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./25.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./27.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./28.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./29.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./30.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./31.png">
+<meta property="og:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./32.png">
+<meta property="og:updated_time" content="2017-10-30T06:26:09.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="直播总结五 RTMP协议">
 <meta name="twitter:description" content="最近在做直播相关内容时，使用到了Rtmp协议，在此记录一下Rtmp协议部分需要注意的地方，方便后续的查阅和复习
 RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出的一种应用层的协议，用来解决多媒体数据传输流多路复用(Multiplexing)和分包(packetizing)的问题，它依赖底层可靠的传输层协议(通常是TCP)来保证信息传输的可靠性">
-<meta name="twitter:image" content="http://yoursite.com/2017/07/30/直播总结五-RTMP协议/./02.png">
+<meta name="twitter:image" content="http://yoursite.com/2017/06/30/直播总结五-RTMP协议/./02.png">
 
   
 
@@ -113,7 +113,7 @@ RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出
     <div class="article-meta">
       <span>
         <i class="icon-calendar"></i>
-        <span>2017.07.30</span>
+        <span>2017.06.30</span>
       </span>
 
       
@@ -149,10 +149,10 @@ RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出
 </ul>
 <p>下面简单了解下C0、C1、C2、S0、S1、S2的格式</p>
 <p><strong>C0和S0</strong></p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./02.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./02.png" alt=""></p>
 <p>C0和S0占一个字节，表示版本号(Version)。在C0中它代表客户端请求的RTMP协议版本号；在S0中它代表服务器选择的RTMP协议版本号，一般均为3</p>
 <p><strong>C1和S1</strong></p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./03.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./03.png" alt=""></p>
 <p>C1和S1数据包的长度为1536个字节，包含以下几个字段</p>
 <ul>
 <li>time(4字节)：本字段包含一个时间戳，客户端应该使用此字段来标识所有流块的时刻。时间戳取值可以为零或其他任意值。为了同步多个块流，客户端可能希望多个块流使用相同的时间戳</li>
@@ -160,7 +160,7 @@ RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出
 <li>random bytes(1528字节)：本字段可以包含任意数据。由于握手的双方需要区分另一端，此字段填充的数据必须足够随机(以防止与其他握手端混淆)。不过没必要为此使用加密数据或动态数据</li>
 </ul>
 <p><strong>C2和S2</strong></p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./04.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./04.png" alt=""></p>
 <p>C2和S2数据包的长度也为1536个字节，包含以下几个字段</p>
 <ul>
 <li>time(4字节)：本字段必须包含对端发送的时间戳</li>
@@ -168,16 +168,16 @@ RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出
 <li>random echo(1528字节)：本字段必须包含对端发送过来的随机数据。握手的双方可以使用时间1和时间2字段来估算网络连接的带宽和/或延迟，但是不一定有用</li>
 </ul>
 <p><strong>一次握手的时序如下图所示</strong></p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./01.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./01.png" alt=""></p>
 <p>理论上来讲只要满足以上条件，如何安排6个Message的顺序都是可以的，但实际实现中为了在保证握手的身份验证功能的基础上尽量减少通信的次数，一般的发送顺序是这样的：<strong><font color="#ff0000">客户端发送C0+C1，服务端回应S0+S1+S2，然后客户端再发送C2进行回应</font></strong></p>
 <p>下面是我们使用WireShark抓包的RTMP握手数据， 通过这些数据可以更加清楚的了解RTMP的实际HandShake过程</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./05.png" alt=""></p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./06.png" alt=""></p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./07.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./05.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./06.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./07.png" alt=""></p>
 <p>到此，RTMP的握手过程我们就分析完了</p>
 <h1 id="二、RTMP-Message-Formats"><a href="#二、RTMP-Message-Formats" class="headerlink" title="二、RTMP Message Formats"></a>二、RTMP Message Formats</h1><p>服务端和客户端通过在网络上发送RTMP Message进行通讯，消息可能包含音频数据、视频数据，或其他的消息。RTMP消息分头和负载两部分</p>
 <p><strong>消息头</strong></p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./24.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./24.png" alt=""></p>
 <ul>
 <li>Message Type：消息类型，占用1个字节</li>
 <li>Payload Length：负载长度，大端序格式，占用3个字节</li>
@@ -189,16 +189,16 @@ RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出
 <h2 id="2-1-Protocol-Control-Message"><a href="#2-1-Protocol-Control-Message" class="headerlink" title="2.1 Protocol Control Message"></a>2.1 Protocol Control Message</h2><p>RTMP块流支持一些协议控制消息。这些消息包含rtmp块流协议需要的信息，并且不能传播到更高层的协议。<font color="#ff0000">它们的Message Stream ID必须为0（代表控制流信息），CSID必须为2，Message Type ID可以为1，2，3，5，6，并且应有最高的发送优先级</font>。每个协议控制消息有一个固定大小的负载，并且作为一个独立的块发送，控制消息的接受端会忽略掉chunk中的时间戳，收到后立即生效</p>
 <h3 id="2-1-1-Set-Chunk-Size"><a href="#2-1-1-Set-Chunk-Size" class="headerlink" title="2.1.1 Set Chunk Size"></a>2.1.1 Set Chunk Size</h3><p><font color="#ff0000">Message Type ID为1</font>，设置chunk中Data字段所能承载的最大字节数，默认为128字节，最大块大小是65535字节。通信过程中可以通过发送该消息来设置chunk Size的大小（不得小于128B），而且通信双方会各自维护一个chunkSize，两端的chunkSize是独立的。例如，假设一个客户端想发送131字节的音频数据，而块大小是128。那么，客户端可以向服务端发送一个协议消息通知对方块大小设置为131字节。然后，客户端就可以在一个块中发送音频数据</p>
 <p>以下为代表Set Chunk Size消息的chunk的Data</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./19.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./19.png" alt=""></p>
 <p>其中第一位必须为0，chunk Size占31个位，最大可代表2147483647＝0x7FFFFFFF＝231-1，但实际上所有大于16777215=0xFFFFFF的值都用不上，因为chunk size不能大于Message的长度(表示Message的长度字段是用3个字节表示的)</p>
 <h3 id="2-1-2-Abort-Message"><a href="#2-1-2-Abort-Message" class="headerlink" title="2.1.2 Abort Message"></a>2.1.2 Abort Message</h3><p><font color="#ff0000">Message Type ID为2</font>，当一个Message被切分为多个chunk，接收端只接收到了部分chunk时，发送该控制消息表示发送端不再传输同Message的chunk，接收端接收到这个消息后要丢弃这些不完整的chunk。Data数据中只需要一个CSID，表示丢弃该CSID的所有已接收到的chunk</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./20.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./20.png" alt=""></p>
 <h3 id="2-1-3-Acknowledgement"><a href="#2-1-3-Acknowledgement" class="headerlink" title="2.1.3 Acknowledgement"></a>2.1.3 Acknowledgement</h3><p><font color="#ff0000">Message Type ID为3</font>，当收到对端的消息大小等于窗口大小（Window Size）时接受端要回馈一个ACK给发送端告知对方可以继续发送数据。窗口大小就是指收到接受端返回的ACK前最多可以发送的字节数量，返回的ACK中会带有从发送上一个ACK后接收到的字节数</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./21.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./21.png" alt=""></p>
 <h3 id="2-1-4-Window-Acknowledgement-Size"><a href="#2-1-4-Window-Acknowledgement-Size" class="headerlink" title="2.1.4 Window Acknowledgement Size"></a>2.1.4 Window Acknowledgement Size</h3><p><font color="#ff0000">Message Type ID为5</font>，发送端在接收到接收端返回的两个ACK间最多可以发送的字节数</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./22.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./22.png" alt=""></p>
 <h3 id="2-1-5-Set-Peer-Bandwidth"><a href="#2-1-5-Set-Peer-Bandwidth" class="headerlink" title="2.1.5 Set Peer Bandwidth"></a>2.1.5 Set Peer Bandwidth</h3><p><font color="#ff0000">Message Type ID为6</font>，限制对端的输出带宽。接收端接收到该消息后会通过设置消息中的Window ACK Size来限制已发送但未接受到反馈的消息的大小来限制发送端的发送带宽。如果消息中的Window ACK Size与上一次发送给发送端的size不同的话要回馈一个Window Acknowledgement Size的控制消息</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./23.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./23.png" alt=""></p>
 <ul>
 <li>Hard(Limit Type＝0)：接受端应该将Window Ack Size设置为消息中的值</li>
 <li>Soft(Limit Type=1)：接受端可以讲Window Ack Size设为消息中的值，也可以保存原来的值(前提是原来的Size小与该控制消息中的Window Ack Size)</li>
@@ -213,7 +213,7 @@ RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出
 <h2 id="2-8-Aggregate-Message"><a href="#2-8-Aggregate-Message" class="headerlink" title="2.8 Aggregate Message"></a>2.8 Aggregate Message</h2><p>聚合消息是含有一个消息列表的一种消息(<font color="#ff0000">消息类型为22</font>)。具体解释参考官方文档规范</p>
 <h1 id="三、Chunking"><a href="#三、Chunking" class="headerlink" title="三、Chunking"></a>三、Chunking</h1><p>在RTMP完成握手之后，连接开始复用一个或多个块流。这是因为RTMP在收发数据的时候并不是以Message为单位的，而是把Message拆分成Chunk发送。<font color="#ff0000">每个块流承载来自一个消息流的一类消息</font>。每个被创建的块都关联到一个唯一的块流ID。所有的块都通过网络传输。在传输过程中，必须一个块发送完之后再发送下一个块。在接收端，每个块都根据块ID被收集成消息。<strong>分块使高层协议的大消息分割成小的消息，保证大的低优先级消息不阻塞小的高优先级消息；分块把原本应该消息中包含的信息压缩在块头中减少了小块消息发送的开销；块大小是可配置的，最大块是65535字节，最小块是128字节。块越大CPU使用率越低，但是也导致大的写入，在低带宽下产生其他内容的延迟。块大小对每个方向都保持独立</strong></p>
 <h2 id="3-1-Chunk-Format-块格式"><a href="#3-1-Chunk-Format-块格式" class="headerlink" title="3.1 Chunk Format(块格式)"></a>3.1 Chunk Format(块格式)</h2><p>块由块头和数据两部分组成。而块头又由三部分组成</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./08.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./08.png" alt=""></p>
 <ul>
 <li>块基本头：1到3字节。本字段包含块流ID和块类型。块类型决定编码的消息头的格式。长度取决于块流ID，块流ID是可变长字段</li>
 <li>块消息头：0，3，7或11字节。本字段编码要发送的消息的信息。本字段的长度，取决于块头中指定的块类型</li>
@@ -222,15 +222,15 @@ RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出
 <h3 id="3-1-1-Basic-Header-块基本头"><a href="#3-1-1-Basic-Header-块基本头" class="headerlink" title="3.1.1 Basic Header(块基本头)"></a>3.1.1 Basic Header(块基本头)</h3><p>块基本头包含块类型和块流ID。<font color="#ff0000">块类型的长度是固定的，占2位，用来决定编码消息头的格式；块流ID一般简写为CSID，用来唯一标识一个特定的流通道</font>。块基本头字段长度可能是1，2或3个字节。这取决于块流ID，在足够存储这两个字段的前提下最好用尽量少的字节从而减少由于引入Header增加的数据量</p>
 <p>RTMP协议支持用户自定义[3，65599]之间的共65597种的CSID：0，1，2由协议保留表示特殊信息。0代表Basic Header总共要占用2个字节，CSID在[64，319]之间(第二个字节+64)；1代表占用3个字节(第三个字节*256+第二个字节+64)，CSID在［64，65599］之间；2代表低层协议消息，是一些控制信息和命令信息，没有其他的字节来表示流ID</p>
 <p>当Basic Header为1个字节时，CSID占6位，用户可自定义的范围为[3，63]</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./09.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./09.png" alt=""></p>
 <p>当Basic Header为2个字节时，CSID占14位，此时协议将与chunk type所在字节的其他位都置为0，还剩8位来表示CSID，因此这种情况下CSID在[64，319]之间</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./10.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./10.png" alt=""></p>
 <p>当Basic Header为3个字节时，CSID占22位，此时协议将与chunk type所在字节的剩余位表示为1，剩下的16位来表示CSID，因此这种情况下CSID在[64，65599]之间</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./11.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./11.png" alt=""></p>
 <p>可以看到2个字节和3个字节的Basic Header所能表示的CSID是有交集的[64，319]，但实际实现时还应该秉着最少字节的原则使用2个字节的表示方式来表示[64，319]的CSID</p>
 <h3 id="3-1-2-Message-Header-块消息头"><a href="#3-1-2-Message-Header-块消息头" class="headerlink" title="3.1.2 Message Header(块消息头)"></a>3.1.2 Message Header(块消息头)</h3><p>包含了要发送的实际信息(可能是完整的，也可能是一部分)的描述信息。Chunk Message Header的格式和长度取决于Chunk Basic Header的chunk type，共有4种不同的格式，由上面所提到的Chunk Basic Header中的fmt字段控制。其中第一种格式可以表示其他三种表示的所有数据，但由于其他三种格式是基于对之前chunk的差量化的表示，因此可以更简洁地表示相同的数据，实际使用的时候还是应该采用尽量少的字节表示相同意义的数据</p>
 <h4 id="3-1-2-1-Type-0"><a href="#3-1-2-1-Type-0" class="headerlink" title="3.1.2.1 Type 0"></a>3.1.2.1 Type 0</h4><p>类型0的块长度为11字节，其他三种能表示的数据它都能表示，但在chunk stream的开始的第一个chunk和头信息中的时间戳后退（即值与上一个chunk相比减小，通常在回退播放的时候会出现这种情况）的时候必须采用这种格式</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./12.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./12.png" alt=""></p>
 <ul>
 <li>timestamp(时间戳)：3个字节，最多能表示到16777215(0xFFFFFF)，当它的值超过这个最大值时，这三个字节都置为1，这样实际的timestamp会转存到Extended Timestamp字段中，接受端在判断timestamp字段24个位都为1时就会去Extended timestamp中解析实际的时间戳</li>
 <li>message length(消息数据的长度)：占用3个字节，表示实际发送的消息数据长度(如音频帧、视频帧等数据的长度)，单位是字节。注意这里是Message的长度，也就是chunk属于的Message的总数据长度，而不是chunk本身Data的数据的长度</li>
@@ -238,12 +238,12 @@ RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出
 <li>message stream id(消息的流id)：占用4个字节，表示该chunk所在的流的ID，和Basic Header的CSID一样，它采用小端存储的方式</li>
 </ul>
 <h4 id="3-1-2-2-Type-1"><a href="#3-1-2-2-Type-1" class="headerlink" title="3.1.2.2 Type 1"></a>3.1.2.2 Type 1</h4><p>类型1的块占7个字节长，<strong>省去了表示msg stream id的4个字节</strong>，表示此chunk和上一次发的chunk所在的流相同，如果在发送端只和对端有一个流链接的时候可以尽量去采取这种格式</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./13.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./13.png" alt=""></p>
 <ul>
 <li>timestamp delta：占用3个字节，注意这里和type＝0时不同，<font color="#ff0000">存储的是和上一个chunk的时间差</font>。类似上面提到的timestamp，当它的值超过3个字节所能表示的最大值时，三个字节都置为1，实际的时间戳差值就会转存到Extended Timestamp字段中，接受端在判断timestamp delta字段24个位都为1时就会去Extended timestamp中解析时机的与上次时间戳的差值</li>
 </ul>
 <h4 id="3-1-2-3-Type-2"><a href="#3-1-2-3-Type-2" class="headerlink" title="3.1.2.3 Type 2"></a>3.1.2.3 Type 2</h4><p>类型2的块占3个字节长，<strong>相对于类型1的格式又省去了表示消息长度的3个字节和表示消息类型的1个字节</strong>，表示此chunk和上一次发送的chunk所在的流、消息的长度和消息的类型都相同。余下的这三个字节表示timestamp delta，使用和类型1一样</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./14.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./14.png" alt=""></p>
 <h4 id="3-1-2-4-Type-3"><a href="#3-1-2-4-Type-3" class="headerlink" title="3.1.2.4 Type 3"></a>3.1.2.4 Type 3</h4><p>类型3的块占0个字节长，流ID、消息长度、时间戳都不出现，它表示这个chunk的Message Header和上一个是完全相同的，自然就不用再传输一遍了</p>
 <ul>
 <li><strong>当它跟在类型0的chunk后面时，表示和前一个chunk的时间戳都是相同的</strong>(比如一个Message拆分成了多个chunk，这个chunk和上一个chunk同属于一个Message)</li>
@@ -252,9 +252,9 @@ RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出
 <h3 id="3-1-3-Extended-Timestamp-扩展时间戳"><a href="#3-1-3-Extended-Timestamp-扩展时间戳" class="headerlink" title="3.1.3 Extended Timestamp(扩展时间戳)"></a>3.1.3 Extended Timestamp(扩展时间戳)</h3><p>扩展时间戳占4个字节。只有当块消息头中的时间戳或时间戳差值设置为0x00ffffff时，本字段才被传送。如果时间戳或时间戳差值小于0x00ffffff，那么本字段一定不能出现。如果时间戳字段不出现本字段也一定不能出现。类型3的块一定不能含有本字段(<font color="#ff0000">注意扩展时间戳存储的是完整值，而不是减去时间戳或者时间戳差的值</font>)</p>
 <h3 id="3-1-4-Chunk-Data-块数据"><a href="#3-1-4-Chunk-Data-块数据" class="headerlink" title="3.1.4 Chunk Data(块数据)"></a>3.1.4 Chunk Data(块数据)</h3><p>用户层面上真正想要发送的与协议无关的数据，长度在(0,chunkSize]之间</p>
 <h2 id="3-2-Chunk-Example-块例子"><a href="#3-2-Chunk-Example-块例子" class="headerlink" title="3.2 Chunk Example(块例子)"></a>3.2 Chunk Example(块例子)</h2><h3 id="3-2-1-Example-1"><a href="#3-2-1-Example-1" class="headerlink" title="3.2.1 Example 1"></a>3.2.1 Example 1</h3><p>本例展示一个简单的音频消息流，其中显示了冗余的信息</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./15.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./15.png" alt=""></p>
 <p>下面显示了这个流产生的块。从消息3 开始，数据传输开始优化。在消息3之后，每个消息只有一个字节的开销</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./16.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./16.png" alt=""></p>
 <ul>
 <li>第一个Message的chunk的Chunk Type为0，因为它没有前面可参考的chunk，所以timestamp为1000，表示时间戳。type为0的Message Header占用11个字节，并且CSID为3，表明Basic Header占用1个字节，再加上Data的32个字节，因此第一个chunk共44=1+11+32个字节</li>
 <li>第二个chunk和第一个chunk的CSID，Type ID，Data的长度都相同，因此Chunk Type为2，timestamp delta＝1020-1000＝20，因此第二个chunk占用36=1+3+32个字节</li>
@@ -262,9 +262,9 @@ RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出
 <li>第四个chunk和第三个chunk情况相同，也占用33=1+32个字节</li>
 </ul>
 <h3 id="3-2-2-Example-2"><a href="#3-2-2-Example-2" class="headerlink" title="3.2.2 Example 2"></a>3.2.2 Example 2</h3><p>本例展示一个消息由于太长，而被分割成128字节的块</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./17.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./17.png" alt=""></p>
 <p>下面是产生的块</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./18.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./18.png" alt=""></p>
 <ul>
 <li>第一个chunk的Chunk Type为0，timestamp为1000，承担128个字节的Data，因此共占用140=11+1+128个字节</li>
 <li>第二个chunk也要发送128个字节，其他字段和第一个chunk相同，因此Chunk Type为3，此时时间戳也为1000，共占用129=1+128个字节</li>
@@ -310,9 +310,9 @@ RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出
 <li>_error表示连接失败</li>
 </ul>
 <p>下面是通过Wireshark进行抓包获取的connect命令数据及_result响应</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./26.png" alt=""></p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./25.png" alt=""></p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./27.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./26.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./25.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./27.png" alt=""></p>
 <h3 id="4-1-2-createStream"><a href="#4-1-2-createStream" class="headerlink" title="4.1.2 createStream"></a>4.1.2 createStream</h3><p>创建传递具体信息的通道，从而可以在这个流中传递具体信息，传输信息单元为Chunk</p>
 <p>客户端到服务端的命令结构如下</p>
 <table>
@@ -374,8 +374,8 @@ RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出
 </tbody>
 </table>
 <p>下面是通过Wireshark进行抓包获取的createStream命令数据及_result响应</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./28.png" alt=""></p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./29.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./28.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./29.png" alt=""></p>
 <h2 id="4-2-NetStream-Commands-流连接上的命令"><a href="#4-2-NetStream-Commands-流连接上的命令" class="headerlink" title="4.2 NetStream Commands(流连接上的命令)"></a>4.2 NetStream Commands(流连接上的命令)</h2><p>NetStream Command是基于连接客户端和服务端的NetConnection对象的，可以使音频流，视频流和数据消息传输的通道。对于多数据流，一个NetConnection对象可以支持多个NetStreams(在传输层协议之上只能连接一个NetConnection，但一个NetConnection可以建立多个NetStream来建立不同的流通道传输数据)。publish、play、pause、seek、receiveAudio、receiveVideo等命令可以通过NetStream进行发送。由于我们在手机端进行推流操作，所以本次只去分析publish命令，其他命令可以参考官方文档规范</p>
 <h3 id="4-2-1-publish"><a href="#4-2-1-publish" class="headerlink" title="4.2.1 publish"></a>4.2.1 publish</h3><p>其命令结构如下</p>
 <table>
@@ -421,7 +421,7 @@ RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出
 <li>append：会将推流数据保存在服务器端，如果文件不存在的话就会建立一个新文件写入，如果对应该流的文件已经存在的话保存原来的数据，在文件末尾接着写入</li>
 </ul>
 <p>下面是通过Wireshark进行抓包获取的publish命令数据</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./30.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./30.png" alt=""></p>
 <h3 id="4-2-2-onStatus"><a href="#4-2-2-onStatus" class="headerlink" title="4.2.2 onStatus"></a>4.2.2 onStatus</h3><p>服务端收到NetStream Command后会通过onStatus命令来响应客户端，表示当前NetStream的状态，其结构如下</p>
 <table>
 <thead>
@@ -462,9 +462,9 @@ RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出
 </ul>
 <p>除了这三种必要信息，用户还可以自己增加自定义的键值对</p>
 <p>下面是通过Wireshark进行抓包获取的对publish命令响应的onStatus命令数据</p>
-<p><img src="/2017/07/30/直播总结五-RTMP协议/./31.png" alt=""></p>
+<p><img src="/2017/06/30/直播总结五-RTMP协议/./31.png" alt=""></p>
 <p>至此，我们将推流肯能用到的command message都了解了一遍，接下来就是发送具体的音视频数据了，这里就不再分析了</p>
-<h1 id="五、推流流程"><a href="#五、推流流程" class="headerlink" title="五、推流流程"></a>五、推流流程</h1><p><img src="/2017/07/30/直播总结五-RTMP协议/./32.png" alt=""></p>
+<h1 id="五、推流流程"><a href="#五、推流流程" class="headerlink" title="五、推流流程"></a>五、推流流程</h1><p><img src="/2017/06/30/直播总结五-RTMP协议/./32.png" alt=""></p>
 <p>上图就是推流的基本流程，至此我们利用RTMP进行直播推流的相关理论知识已总结完毕，可能东西有点多，需要反复看来熟悉RTMP协议</p>
 <h1 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h1><p><a href="http://mingyangshang.github.io/2016/03/06/RTMP%E5%8D%8F%E8%AE%AE/" target="_blank" rel="external">http://mingyangshang.github.io/2016/03/06/RTMP%E5%8D%8F%E8%AE%AE/</a></p>
 
@@ -477,10 +477,10 @@ RTMP(Real Time Message Protocal 实时信息传输协议)是由Adobe公司提出
 
    
   <div class="box-prev-next clearfix">
-    <a class="show pull-left" href="/2017/07/25/直播总结四-NALU/">
+    <a class="show pull-left" href="/2017/06/25/直播总结四-NALU/">
         <i class="icon icon-angle-left"></i>
     </a>
-    <a class="show pull-right" href="/2017/08/26/Android-OpenSL-ES播放wav文件/">
+    <a class="show pull-right" href="/2017/07/10/Java内存区域-一-运行时数据区域/">
         <i class="icon icon-angle-right"></i>
     </a>
   </div>
