@@ -28,7 +28,7 @@
 <meta property="og:description" content="常用白皮书MPEG-4是一组协议族，其编号为ISO&#x2F;IEC 14496，常用的有    Part Number Title Description    1 ISO&#x2F;IEC 14996-1 System MPEG-4 的复用、同步等系统级特性   2 ISO&#x2F;IEC 14996-2 Video 视频压缩标准   3 ISO&#x2F;IEC 14996-3 Audio 音频压缩标准   10 ISO&#x2F;IEC">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2021-08-01T13:06:56.000Z">
-<meta property="article:modified_time" content="2021-08-01T14:23:34.269Z">
+<meta property="article:modified_time" content="2021-08-02T12:16:58.527Z">
 <meta property="article:author" content="おう こう">
 <meta name="twitter:card" content="summary">
 
@@ -172,10 +172,16 @@
                 <i class="far fa-calendar"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2021-08-01 21:06:56 / 修改时间：22:23:34" itemprop="dateCreated datePublished" datetime="2021-08-01T21:06:56+08:00">2021-08-01</time>
+              <time title="创建时间：2021-08-01 21:06:56" itemprop="dateCreated datePublished" datetime="2021-08-01T21:06:56+08:00">2021-08-01</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2021-08-02 20:16:58" itemprop="dateModified" datetime="2021-08-02T20:16:58+08:00">2021-08-02</time>
+              </span>
 
           
             <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
@@ -262,6 +268,142 @@
 <ul>
 <li>fullbox增加了<code>version</code>和<code>flags</code>字段</li>
 </ul>
+<h2 id="常用Box类型"><a href="#常用Box类型" class="headerlink" title="常用Box类型"></a>常用Box类型</h2><table>
+<thead>
+<tr>
+<th align="center">类型</th>
+<th align="center">父容器</th>
+<th align="center">含义</th>
+<th align="center">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">ftyp</td>
+<td align="center">文件</td>
+<td align="center">file type</td>
+<td align="center">文件类型与兼容性</td>
+</tr>
+<tr>
+<td align="center">moov</td>
+<td align="center">文件</td>
+<td align="center">movie box</td>
+<td align="center">视频文件全局信息结构</td>
+</tr>
+<tr>
+<td align="center">mvhd</td>
+<td align="center">moov</td>
+<td align="center">movie header</td>
+<td align="center">保存文件时长，时间等信息</td>
+</tr>
+<tr>
+<td align="center">trak</td>
+<td align="center">moov</td>
+<td align="center">media track</td>
+<td align="center">音频/视频轨</td>
+</tr>
+<tr>
+<td align="center">tkhd</td>
+<td align="center">trak</td>
+<td align="center">track header</td>
+<td align="center">音频/视频轨头结构</td>
+</tr>
+<tr>
+<td align="center">edts</td>
+<td align="center">trak</td>
+<td align="center">edit list container</td>
+<td align="center">编辑列表容器，用于存储elst信息</td>
+</tr>
+<tr>
+<td align="center">elst</td>
+<td align="center">edts</td>
+<td align="center">an edit list</td>
+<td align="center">编辑列表，用于编辑流的播放时间轴</td>
+</tr>
+<tr>
+<td align="center">mdia</td>
+<td align="center">trak</td>
+<td align="center">media info</td>
+<td align="center">一个轨道中媒体的详细信息</td>
+</tr>
+<tr>
+<td align="center">mdhd</td>
+<td align="center">mdia</td>
+<td align="center">media header</td>
+<td align="center">媒体数据的参数信息</td>
+</tr>
+<tr>
+<td align="center">hdlr</td>
+<td align="center">mdia</td>
+<td align="center">handler</td>
+<td align="center">媒体流句柄</td>
+</tr>
+<tr>
+<td align="center">minf</td>
+<td align="center">mdia</td>
+<td align="center">media information</td>
+<td align="center">媒体流参数信息</td>
+</tr>
+<tr>
+<td align="center">vmhd</td>
+<td align="center">minf</td>
+<td align="center">video media header</td>
+<td align="center">视频数据相关信息(仅存在于视频流中)</td>
+</tr>
+<tr>
+<td align="center">smhd</td>
+<td align="center">minf</td>
+<td align="center">sound media header</td>
+<td align="center">音频数据相关信息(仅存在于音频流中)</td>
+</tr>
+<tr>
+<td align="center">stbl</td>
+<td align="center">mdia</td>
+<td align="center">sample table</td>
+<td align="center">保存了音视频帧的sample构建播放列表的参数信息，是进行音视频播放和同步的重要数据</td>
+</tr>
+<tr>
+<td align="center">stsd</td>
+<td align="center">stbl</td>
+<td align="center">sample description</td>
+<td align="center">音视频的描述信息(编码器名称，分辨率等信息)</td>
+</tr>
+<tr>
+<td align="center">stts</td>
+<td align="center">stbl</td>
+<td align="center">decoding time to sample</td>
+<td align="center">每个sample的解码时间戳</td>
+</tr>
+<tr>
+<td align="center">ctts</td>
+<td align="center">stbl</td>
+<td align="center">composition time to sample</td>
+<td align="center">每个sample的显示时间偏移</td>
+</tr>
+<tr>
+<td align="center">stsc</td>
+<td align="center">stbl</td>
+<td align="center">sample chunk</td>
+<td align="center">每个chunk对应的sample数目</td>
+</tr>
+<tr>
+<td align="center">stsz</td>
+<td align="center">stbl</td>
+<td align="center">sample sizes</td>
+<td align="center">每个sample的大小</td>
+</tr>
+<tr>
+<td align="center">stco</td>
+<td align="center">stbl</td>
+<td align="center">chunk offset</td>
+<td align="center">每个chunk在文件中的位置</td>
+</tr>
+<tr>
+<td align="center">mdat</td>
+<td align="center">文件</td>
+<td align="center">media data container</td>
+<td align="center">实际的音视频数据</td>
+</tr>
+</tbody></table>
 
     </div>
 
@@ -332,7 +474,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%99%BD%E7%9A%AE%E4%B9%A6"><span class="nav-number">1.</span> <span class="nav-text">常用白皮书</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Box"><span class="nav-number">2.</span> <span class="nav-text">Box</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8%E7%99%BD%E7%9A%AE%E4%B9%A6"><span class="nav-number">1.</span> <span class="nav-text">常用白皮书</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Box"><span class="nav-number">2.</span> <span class="nav-text">Box</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8Box%E7%B1%BB%E5%9E%8B"><span class="nav-number">2.1.</span> <span class="nav-text">常用Box类型</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
